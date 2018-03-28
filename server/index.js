@@ -23,6 +23,7 @@ if (cluster.isMaster) {
 
   const client = new Client({
       connectionString: process.env.DATABASE_URL,
+      password: process.env.PASSWORD,
       ssl: true,
   });
   client.connect();  
