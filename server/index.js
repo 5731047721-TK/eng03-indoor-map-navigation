@@ -5,7 +5,7 @@ const numCPUs = require('os').cpus().length;
 const pg = require('pg');
 const PORT = process.env.PORT || 5000;
 const { Client } = require('pg');
-
+pg.defaults.ssl = true
 // Multi-process to utilize all CPU cores.
 if (cluster.isMaster) {
   console.error(`Node cluster master ${process.pid} is running`);
