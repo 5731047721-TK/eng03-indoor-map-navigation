@@ -57,37 +57,37 @@ class FloorOne extends React.Component {
           <title
              id="title894">Storage Room 1</title>
         </path>
-        <path onClick={this.onClick} fill = {this.state.Color}
+        <path onClick={this.onClick} //fill = {this.state.Color}
            d="m -184.57841,64.721003 v 29.10417 h 26.45834 v -29.10417 z"
            id="path27">
           <title
              id="title892">Associate Dean Room</title>
         </path>
-        <path onClick={this.onClick} fill = {this.state.Color}
+        <path onClick={this.onClick} //fill = {this.state.Color}
            d="m -156.79716,64.721003 v 29.10417 h 26.45833 v -29.10417 z"
            id="path29">
           <title
              id="title882">OD Room</title>
         </path>
-        <path onClick={this.onClick} fill = {this.state.Color}
+        <path onClick={this.onClick} //fill = {this.state.Color}
            d="m -129.01591,64.721003 v 29.10417 h 34.395857 v -13.22917 h -21.166687 v -15.875 z"
            id="path31">
           <title
              id="title965">Storage Room 2</title>
         </path>
-        <path onClick={this.onClick} fill = {this.state.Color}
+        <path onClick={this.onClick} //fill = {this.state.Color}
            d="m -114.46383,64.721003 v 14.55208 h 19.843777 v -14.55208 z"
            id="path33">
           <title
              id="title880">UPs Room</title>
         </path>
-        <path onClick={this.onClick} fill = {this.state.Color}
+        <path onClick={this.onClick} //fill = {this.state.Color}
            d="m -93.297143,64.721003 v 14.55208 h 19.843753 v -14.55208 z"
            id="path35">
           <title
              id="title878">Server Room</title>
         </path>
-        <path onClick={this.onClick} fill = {this.state.Color}
+        <path onClick={this.onClick} //fill = {this.state.Color}
            d="m -93.297143,80.596003 v 13.22917 h 19.843753 v -13.22917 h -19.843753"
            id="path37">
           <title
@@ -315,6 +315,7 @@ class FloorOne extends React.Component {
       </g>
     </g>
      </svg>
+
       </div>
       );
     }

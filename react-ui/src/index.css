@@ -15,6 +15,10 @@ body {
   margin-top: 5%;
 }
 
+.active{
+  background-color: yellowgreen;
+}
+
 /*path:hover{
   stroke: #002868 !important;
   stroke-width:2px;
@@ -22,6 +26,10 @@ body {
   fill: #002868 !important;
   cursor: pointer;
 }*/
+
+path{
+  stroke: #002868 !important;
+}
 
 #info-box {
   display: none;
