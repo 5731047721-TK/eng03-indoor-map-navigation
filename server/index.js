@@ -41,7 +41,7 @@ if (cluster.isMaster) {
   // Test db
   app.get('/db', function(req, res){
     pg.connect(process.env.DATABASE_URL+"?ssl=true",function(err, client, done){
-      client.query('SELECT * FROM test_table', function(err, result){
+      client.query('SELECT * FROM node', function(err, result){
         done();
         if(err){
             console.error(err)
@@ -63,4 +63,3 @@ if (cluster.isMaster) {
     console.error(`Node cluster worker ${process.pid}: listening on port ${PORT}`);
   });
 }
-//Add this line so I can commit again
