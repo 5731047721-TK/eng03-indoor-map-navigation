@@ -2,6 +2,7 @@ import React from 'react';
 //import ReactDOM from 'react-dom';
 
 class FloorOne extends React.Component {
+    target
     constructor(props) {
       super(props);
       this.onClick = this.onClick.bind(this);
@@ -13,10 +14,10 @@ class FloorOne extends React.Component {
   
     onClick(e){
       if(e){
-        
-        if(e.target.id === 'path25') this.setState( {Color:"	#FFA07A",})
-        alert(e.target.id);
-        // console.log(this.State.Color)
+        window.location = '/api/1/' + e.target.id
+        //if(e.target.id === 'path25') this.setState( {Color:"	#FFA07A",})
+        //alert(e.target.id);
+        console.log(e.target.id)
       }
     }
     

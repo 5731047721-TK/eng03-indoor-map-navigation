@@ -1,11 +1,42 @@
 const express = require('express');
+const router = express.Router();
 const path = require('path');
 const cluster = require('cluster');
 const numCPUs = require('os').cpus().length;
 const pg = require('pg');
 const PORT = process.env.PORT || 5000;
-const { Client } = require('pg');
+const { Pool } = require('pg');
 pg.defaults.ssl = true
+
+const pool = new Pool({
+      connectionString: process.env.DATABASE_URL,
+      password: process.env.PASSWORD,
+      // ssl: true,
+  });
+
+function lookUpPath(req, res, next){
+  var id = req.params.path_id
+  var floor = req.params.floor_id
+
+  var sql = 'SELECT * FROM navigation WHERE id = ?'
+  pool.query(sql,[id], function(err, results){
+    if(err){
+      console.error(err);
+      res.statusCode = 500;
+      pool.end();
+      return res.json({ errors: ['Cannot find table']})
+    }  
+    if(results.rows.length === 0){
+      res.statusCode = 404;
+      pool.end();
+      return res.json({ errors: ['Path not found']})
+    }
+    req.node = results.rows[0];
+    pool.end();
+    next();
+  })
+}
+
 // Multi-process to utilize all CPU cores.
 if (cluster.isMaster) {
   console.error(`Node cluster master ${process.pid} is running`);
@@ -21,37 +52,59 @@ if (cluster.isMaster) {
 
 } else {
 
-  const client = new Client({
-      connectionString: process.env.DATABASE_URL,
-      password: process.env.PASSWORD,
-      ssl: true,
-  });
-  client.connect();  
+  
+    
   const app = express();
-
+  
   // Priority serve any static files.
   app.use(express.static(path.resolve(__dirname, '../react-ui/build')));
 
+  router.get('/:floor_id/:path_id', lookUpPath, (req, res) =>{
+    // const results = []
+    // const id = req.params.path_id
+    // const floor = req.params.floor_id
+    // pool.query('SELECT * FROM navigation WHERE id=($1)',[id], (err, result)=>{
+    //   if(err){
+    //     console.log('Its error!!')
+    //     console.log(err);
+    //     pool.end()
+    //     return res.status(500).json({success: false, data: err});
+    //   } else{
+    //     console.log('Query success on floor', floor, 'path', id)
+    //     console.log({results: result.rows})
+    //     results.push(result.rows)
+    //     pool.end()
+    //     return res.json(results)
+    //   }
+    // })
+    res.json(req.node)
+    // res.end()
+  })
+
+  app.use('/api',router)
+
   // Answer API requests.
-  app.get('/api', function (req, res) {
-    res.set('Content-Type', 'application/json');
-    res.send('{"message":"Hello from the custom server!"}');
-  });
+  // app.get('/api', function (req, res) {
+  //   res.set('Content-Type', 'application/json');
+  //   res.send('{"message":"Hello from the custom server!"}');
+  // });
 
   // Test db
-  app.get('/db', function(req, res){
-    pg.connect(process.env.DATABASE_URL+"?ssl=true",function(err, client, done){
-      client.query('SELECT * FROM node', function(err, result){
-        done();
-        if(err){
-            console.error(err)
-            res.send("ERRORRRR!!!! " + err)
-        } else{
-            res.render('pages/db', {results: result.rows})
-        }
-        client.end();
-      })  
+  app.get('/db', function(request, response){
+    pool.query('SELECT * FROM node', function(err, result){
+      console.log('log message below\n', err, result)
+      console.log('Database string below\n', pool.connectionString, process.env.DATABASE_URL)
+      if(err){
+        console.error(err)
+        response.send("Error from query > " + err)
+      } else{
+        console.log('Query successfully, rendering results')
+        console.log({results: result.rows})
+        // response.render({results: result.rows})
+      }
+      pool.end()
     })
+    response.end()
   });
 
   // All remaining requests return the React app, so it can handle routing.
@@ -62,4 +115,6 @@ if (cluster.isMaster) {
   app.listen(PORT, function () {
     console.error(`Node cluster worker ${process.pid}: listening on port ${PORT}`);
   });
+
+  module.exports = app
 }

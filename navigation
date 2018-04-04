@@ -1,0 +1,339 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 10.3
+-- Dumped by pg_dump version 10.3
+
+-- Started on 2018-04-02 23:27:44
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- TOC entry 5 (class 2615 OID 16394)
+-- Name: navigation; Type: SCHEMA; Schema: -; Owner: postgres
+--
+
+CREATE SCHEMA navigation;
+
+
+ALTER SCHEMA navigation OWNER TO postgres;
+
+--
+-- TOC entry 1 (class 3079 OID 12924)
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- TOC entry 2816 (class 0 OID 0)
+-- Dependencies: 1
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- TOC entry 200 (class 1259 OID 16488)
+-- Name: object; Type: TABLE; Schema: navigation; Owner: postgres
+--
+
+CREATE TABLE navigation.object (
+    o_id integer NOT NULL,
+    category character varying(20),
+    location character varying(10),
+    direction character varying(5)
+);
+
+
+ALTER TABLE navigation.object OWNER TO postgres;
+
+--
+-- TOC entry 199 (class 1259 OID 16486)
+-- Name: object_o_id_seq; Type: SEQUENCE; Schema: navigation; Owner: postgres
+--
+
+CREATE SEQUENCE navigation.object_o_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE navigation.object_o_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2817 (class 0 OID 0)
+-- Dependencies: 199
+-- Name: object_o_id_seq; Type: SEQUENCE OWNED BY; Schema: navigation; Owner: postgres
+--
+
+ALTER SEQUENCE navigation.object_o_id_seq OWNED BY navigation.object.o_id;
+
+
+--
+-- TOC entry 198 (class 1259 OID 16453)
+-- Name: route; Type: TABLE; Schema: navigation; Owner: postgres
+--
+
+CREATE TABLE navigation.route (
+    id character varying(10) NOT NULL,
+    "N" character varying(10),
+    "E" character varying(10),
+    "S" character varying(10),
+    "W" character varying(10),
+    "Description" character varying(50)
+);
+
+
+ALTER TABLE navigation.route OWNER TO postgres;
+
+--
+-- TOC entry 197 (class 1259 OID 16395)
+-- Name: building; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.building (
+);
+
+
+ALTER TABLE public.building OWNER TO postgres;
+
+--
+-- TOC entry 2679 (class 2604 OID 16491)
+-- Name: object o_id; Type: DEFAULT; Schema: navigation; Owner: postgres
+--
+
+ALTER TABLE ONLY navigation.object ALTER COLUMN o_id SET DEFAULT nextval('navigation.object_o_id_seq'::regclass);
+
+
+--
+-- TOC entry 2808 (class 0 OID 16488)
+-- Dependencies: 200
+-- Data for Name: object; Type: TABLE DATA; Schema: navigation; Owner: postgres
+--
+
+COPY navigation.object (o_id, category, location, direction) FROM stdin;
+1	amazon	f1_16	W
+2	amazon	f1_18	W
+3	xerox	f1_20	S
+4	xerox	f1_21	E
+5	ATM	f1_22	S
+6	bench	f1_21	E
+7	bench	f1_23	N
+8	bench	f1_23	E
+9	bench	f1_24	E
+10	bench	f1_25	N
+11	bench	f1_25	E
+12	bench	f1_26	N
+14	bench	f1_26	W
+13	bench	f1_26	E
+15	door	f1_26	S
+16	bench	f1_27	N
+17	bench	f1_27	W
+20	bench	f1_29	W
+19	door	f1_28	S
+21	bench	f1_30	E
+22	bench	f1_31	E
+18	bench	f1_28	N
+23	bench	f1_32	N
+24	bench	f1_32	E
+25	bench	f1_33	W
+26	bench	f1_33	N
+27	bench	f1_33	E
+28	bench	f1_34	W
+33	bench	f1_36	W
+32	bench	f1_35	W
+31	bench	f1_34	N
+29	bench	f1_34	N
+30	bench	f1_34	W
+34	fire_extin	f1_40	E
+36	fire_extin	f1_41	N
+35	shelf	f1_40	W
+39	bench	f1_45	E
+38	bench	f1_43	N
+37	elevator	f1_43	E
+40	bench	f1_46	S
+45	bench	f1_51	W
+43	bench	f1_49	E
+44	bench	f1_49	W
+41	bench	f1_47	E
+42	bench	f1_48	E
+46	bench	f1_52	W
+47	bench	f1_54	S
+48	bench	f1_54	S
+\.
+
+
+--
+-- TOC entry 2806 (class 0 OID 16453)
+-- Dependencies: 198
+-- Data for Name: route; Type: TABLE DATA; Schema: navigation; Owner: postgres
+--
+
+COPY navigation.route (id, "N", "E", "S", "W", "Description") FROM stdin;
+f1_56	f1_57	b1_41	\N	f1_55	\N
+f1_53	\N	f1_54	\N	f1_52	\N
+f1_54	b1_37	f1_55	\N	f1_53	\N
+f1_1	b1_1	f1_2	b1_2	\N	\N
+f1_51	b1_36	f1_52	\N	f1_50	\N
+f1_52	\N	f1_53	\N	f1_51	\N
+f1_50	\N	f1_51	\N	f1_49	\N
+f1_48	b1_35	f1_49	\N	f1_47	\N
+f1_49	\N	f1_50	\N	f1_48	\N
+f1_47	\N	f1_48	\N	f1_46	\N
+f1_55	\N	f1_56	\N	f1_54	\N
+f1_57	b1_38,b1_3	b1_40	f1_56	\N	\N
+f1_5	\N	f1_6	\N	f1_4	\N
+f1_4	b1_6	f1_5	b1_5	f1_3	\N
+f1_8	b1_9	f1_9	\N	f1_7	\N
+f1_12	b1_11	f1_13	\N	f1_11	\N
+f1_11	\N	f1_12	\N	f1_10	\N
+f1_14	f1_15	b1_15	\N	\N	\N
+f1_13	\N	f1_14	\N	f1_12	\N
+f1_16	f1_14	\N	f1_17	\N	\N
+f1_15	b1_14	\N	f1_14	\N	\N
+f1_3	\N	f1_4	\N	f1_2	\N
+f1_2	b1_4	f1_3	b1_3	f1_1	\N
+f1_17	f1_16	\N	f1_18	\N	\N
+f1_22	b1_13	\N	\N	f1_19	\N
+f1_19	f1_18	f1_23	f1_20	f1_22	\N
+f1_21	f1_20	b1_19	\N	\N	\N
+f1_20	f1_19	\N	f1_21	b1_20	\N
+f1_23	\N	f1_24	b1_17,b1_1	f1_19	\N
+f1_29	\N	f1_30	\N	f1_28	\N
+f1_25	\N	f1_26	b1_21	f1_24	\N
+f1_24	\N	f1_25	\N	f1_23	\N
+f1_27	\N	f1_28	\N	f1_26	\N
+f1_26	\N	f1_27	\N	f1_25	\N
+f1_18	f1_17	b1_16	f1_19	\N	\N
+f1_28	\N	f1_29	b1_21	f1_27	\N
+o_1	f1_21	o_2	\N	\N	\N
+o_2	\N	o_3	\N	o_1	\N
+o_3	b1_23	\N	\N	o_2	\N
+f1_31	\N	f1_32	\N	f1_30	\N
+f1_30	\N	f1_31	\N	f1_29	\N
+f1_37	f1_36	\N	f1_38	\N	\N
+f1_35	\N	f1_36	\N	f1_34	\N
+f1_32	\N	f1_33	b1_23	f1_31	\N
+f1_33	\N	f1_34	b1_24	f1_32	\N
+f1_34	\N	f1_35	b1_26	f1_33	\N
+f1_39	f1_38	\N	f1_40	\N	\N
+f1_38	f1_37	b1_28	f1_39	b1_27	\N
+f1_36	b1_31	\N	f1_37	f1_35	\N
+f1_41	f1_40	b1_30	\N	\N	\N
+f1_40	f1_39	b1_29	f1_41	\N	\N
+f1_44	f1_45	\N	f1_43	\N	\N
+f1_43	f1_44	b1_42	f1_42	\N	\N
+f1_42	f1_43	\N	\N	f1_36	\N
+f1_45	f1_46	\N	f1_44	b1_32	\N
+f1_46	b1_34	\N	f1_45	b1_33	\N
+f1_7	b1_7	f1_8	\N	f1_6	\N
+f1_9	\N	f1_10	\N	f1_8	\N
+f1_6	\N	f1_7	\N	f1_5	\N
+b1_1	\N	\N	f1_1	\N	Storage Room1
+b1_2	f1_1	\N	\N	\N	Toilet
+b1_3	f1_2	\N	\N	\N	MBE Room
+b1_4	\N	\N	f1_2	\N	Associate Dean Room
+b1_5	f1_4	\N	\N	\N	Conference Room 2
+b1_6	\N	\N	f1_5	\N	OD Room
+b1_7	b1_8	b1_10	f1_7	\N	Storage Room2
+b1_8	\N	\N	b1_7	\N	UPs Room
+b1_9	\N	\N	f1_8	\N	Storage Room3
+b1_10	\N	\N	\N	b1_6	Server Room
+b1_11	\N	\N	f1_12	\N	iThink Room
+f1_10	\N	f1_11	b1_12	f1_9	\N
+b1_16	\N	\N	\N	f1_18	Toshiba Room
+b1_15	\N	\N	\N	f1_14	Room no. 124
+b1_14	\N	\N	f1_15	\N	Room no. 123
+b1_13	\N	\N	f1_22	\N	Amazon Cafe'
+b1_12	f1_10	\N	\N	\N	Conference Room 1
+b1_18	f1_23	\N	\N	\N	copy shop
+b1_17	f1_23	\N	\N	\N	Stair floor1
+b1_21	f1_28	\N	\N	\N	Conference Hall
+b1_42	\N	\N	\N	f1_43	Elevator floor1
+b1_20	\N	f1_20	\N	\N	Elevator floor1
+b1_19	\N	\N	\N	f1_21	Prayer Room
+b1_29	\N	\N	\N	f1_40	System Room
+b1_30	\N	\N	\N	f1_41	Toilet(M)
+b1_23	f1_32	\N	b1_25	\N	Conference Room 116/3
+b1_24	f1_33	\N	\N	\N	Hall of Frame
+b1_22	\N	\N	o_3	\N	Toilet
+b1_27	\N	f1_38	\N	\N	Stair floor1
+b1_28	\N	\N	\N	f1_38	Toilet(F)
+b1_25	b1_23	\N	\N	\N	Conference Room 116/2
+b1_26	f1_34	\N	\N	\N	Engineering museum
+b1_41	\N	\N	\N	f1_56	Office of Student Affairs
+b1_40	\N	\N	\N	f1_57	Staff Room
+b1_39	\N	\N	f1_57	\N	Toilet Staff
+b1_32	\N	f1_45	\N	\N	Academic Affairs Director room
+b1_31	\N	\N	f1_36	\N	Registeration Room
+b1_34	\N	\N	f1_46	\N	Dean Room
+b1_33	\N	f1_46	\N	\N	Secretary Room
+b1_36	\N	\N	f1_51	\N	Physical Management Room
+b1_35	\N	\N	f1_48	\N	HR Room
+b1_38	\N	\N	f1_57	\N	Stairs floor1
+b1_37	\N	\N	f1_53	\N	Financial and Supplies Room
+\.
+
+
+--
+-- TOC entry 2805 (class 0 OID 16395)
+-- Dependencies: 197
+-- Data for Name: building; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.building  FROM stdin;
+\.
+
+
+--
+-- TOC entry 2818 (class 0 OID 0)
+-- Dependencies: 199
+-- Name: object_o_id_seq; Type: SEQUENCE SET; Schema: navigation; Owner: postgres
+--
+
+SELECT pg_catalog.setval('navigation.object_o_id_seq', 48, true);
+
+
+--
+-- TOC entry 2683 (class 2606 OID 16493)
+-- Name: object object_pkey; Type: CONSTRAINT; Schema: navigation; Owner: postgres
+--
+
+ALTER TABLE ONLY navigation.object
+    ADD CONSTRAINT object_pkey PRIMARY KEY (o_id);
+
+
+--
+-- TOC entry 2681 (class 2606 OID 16457)
+-- Name: route route_pkey; Type: CONSTRAINT; Schema: navigation; Owner: postgres
+--
+
+ALTER TABLE ONLY navigation.route
+    ADD CONSTRAINT route_pkey PRIMARY KEY (id);
+
+
+-- Completed on 2018-04-02 23:27:44
+
+--
+-- PostgreSQL database dump complete
+--
+

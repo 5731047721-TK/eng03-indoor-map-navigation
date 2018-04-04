@@ -1,0 +1,333 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 10.3
+-- Dumped by pg_dump version 10.3
+
+-- Started on 2018-04-04 14:54:17
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- TOC entry 5 (class 2615 OID 16394)
+-- Name: navigation; Type: SCHEMA; Schema: -; Owner: postgres
+--
+
+CREATE SCHEMA navigation;
+
+
+ALTER SCHEMA navigation OWNER TO postgres;
+
+--
+-- TOC entry 1 (class 3079 OID 12924)
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- TOC entry 2816 (class 0 OID 0)
+-- Dependencies: 1
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- TOC entry 200 (class 1259 OID 16488)
+-- Name: object; Type: TABLE; Schema: navigation; Owner: postgres
+--
+
+CREATE TABLE navigation.object (
+    o_id integer NOT NULL,
+    category character varying(20),
+    location character varying(10),
+    direction character varying(5)
+);
+
+
+ALTER TABLE navigation.object OWNER TO postgres;
+
+--
+-- TOC entry 199 (class 1259 OID 16486)
+-- Name: object_o_id_seq; Type: SEQUENCE; Schema: navigation; Owner: postgres
+--
+
+CREATE SEQUENCE navigation.object_o_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE navigation.object_o_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2817 (class 0 OID 0)
+-- Dependencies: 199
+-- Name: object_o_id_seq; Type: SEQUENCE OWNED BY; Schema: navigation; Owner: postgres
+--
+
+ALTER SEQUENCE navigation.object_o_id_seq OWNED BY navigation.object.o_id;
+
+
+--
+-- TOC entry 198 (class 1259 OID 16453)
+-- Name: route; Type: TABLE; Schema: navigation; Owner: postgres
+--
+
+CREATE TABLE navigation.route (
+    id character varying(10) NOT NULL,
+    "N" character varying(10),
+    "E" character varying(10),
+    "S" character varying(10),
+    "W" character varying(10),
+    "Description" character varying(50)
+);
+
+
+ALTER TABLE navigation.route OWNER TO postgres;
+
+--
+-- TOC entry 197 (class 1259 OID 16395)
+-- Name: building; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.building (
+);
+
+
+ALTER TABLE public.building OWNER TO postgres;
+
+--
+-- TOC entry 2679 (class 2604 OID 16491)
+-- Name: object o_id; Type: DEFAULT; Schema: navigation; Owner: postgres
+--
+
+ALTER TABLE ONLY navigation.object ALTER COLUMN o_id SET DEFAULT nextval('navigation.object_o_id_seq'::regclass);
+
+
+--
+-- TOC entry 2808 (class 0 OID 16488)
+-- Dependencies: 200
+-- Data for Name: object; Type: TABLE DATA; Schema: navigation; Owner: postgres
+--
+
+INSERT INTO navigation.object VALUES (1, 'amazon', 'f1_16', 'W');
+INSERT INTO navigation.object VALUES (2, 'amazon', 'f1_18', 'W');
+INSERT INTO navigation.object VALUES (3, 'xerox', 'f1_20', 'S');
+INSERT INTO navigation.object VALUES (4, 'xerox', 'f1_21', 'E');
+INSERT INTO navigation.object VALUES (5, 'ATM', 'f1_22', 'S');
+INSERT INTO navigation.object VALUES (6, 'bench', 'f1_21', 'E');
+INSERT INTO navigation.object VALUES (7, 'bench', 'f1_23', 'N');
+INSERT INTO navigation.object VALUES (8, 'bench', 'f1_23', 'E');
+INSERT INTO navigation.object VALUES (9, 'bench', 'f1_24', 'E');
+INSERT INTO navigation.object VALUES (10, 'bench', 'f1_25', 'N');
+INSERT INTO navigation.object VALUES (11, 'bench', 'f1_25', 'E');
+INSERT INTO navigation.object VALUES (12, 'bench', 'f1_26', 'N');
+INSERT INTO navigation.object VALUES (14, 'bench', 'f1_26', 'W');
+INSERT INTO navigation.object VALUES (13, 'bench', 'f1_26', 'E');
+INSERT INTO navigation.object VALUES (15, 'door', 'f1_26', 'S');
+INSERT INTO navigation.object VALUES (16, 'bench', 'f1_27', 'N');
+INSERT INTO navigation.object VALUES (17, 'bench', 'f1_27', 'W');
+INSERT INTO navigation.object VALUES (20, 'bench', 'f1_29', 'W');
+INSERT INTO navigation.object VALUES (19, 'door', 'f1_28', 'S');
+INSERT INTO navigation.object VALUES (21, 'bench', 'f1_30', 'E');
+INSERT INTO navigation.object VALUES (22, 'bench', 'f1_31', 'E');
+INSERT INTO navigation.object VALUES (18, 'bench', 'f1_28', 'N');
+INSERT INTO navigation.object VALUES (23, 'bench', 'f1_32', 'N');
+INSERT INTO navigation.object VALUES (24, 'bench', 'f1_32', 'E');
+INSERT INTO navigation.object VALUES (25, 'bench', 'f1_33', 'W');
+INSERT INTO navigation.object VALUES (26, 'bench', 'f1_33', 'N');
+INSERT INTO navigation.object VALUES (27, 'bench', 'f1_33', 'E');
+INSERT INTO navigation.object VALUES (28, 'bench', 'f1_34', 'W');
+INSERT INTO navigation.object VALUES (33, 'bench', 'f1_36', 'W');
+INSERT INTO navigation.object VALUES (32, 'bench', 'f1_35', 'W');
+INSERT INTO navigation.object VALUES (31, 'bench', 'f1_34', 'N');
+INSERT INTO navigation.object VALUES (29, 'bench', 'f1_34', 'N');
+INSERT INTO navigation.object VALUES (30, 'bench', 'f1_34', 'W');
+INSERT INTO navigation.object VALUES (34, 'fire_extin', 'f1_40', 'E');
+INSERT INTO navigation.object VALUES (36, 'fire_extin', 'f1_41', 'N');
+INSERT INTO navigation.object VALUES (35, 'shelf', 'f1_40', 'W');
+INSERT INTO navigation.object VALUES (39, 'bench', 'f1_45', 'E');
+INSERT INTO navigation.object VALUES (38, 'bench', 'f1_43', 'N');
+INSERT INTO navigation.object VALUES (37, 'elevator', 'f1_43', 'E');
+INSERT INTO navigation.object VALUES (40, 'bench', 'f1_46', 'S');
+INSERT INTO navigation.object VALUES (45, 'bench', 'f1_51', 'W');
+INSERT INTO navigation.object VALUES (43, 'bench', 'f1_49', 'E');
+INSERT INTO navigation.object VALUES (44, 'bench', 'f1_49', 'W');
+INSERT INTO navigation.object VALUES (41, 'bench', 'f1_47', 'E');
+INSERT INTO navigation.object VALUES (42, 'bench', 'f1_48', 'E');
+INSERT INTO navigation.object VALUES (46, 'bench', 'f1_52', 'W');
+INSERT INTO navigation.object VALUES (47, 'bench', 'f1_54', 'S');
+INSERT INTO navigation.object VALUES (48, 'bench', 'f1_54', 'S');
+
+
+--
+-- TOC entry 2806 (class 0 OID 16453)
+-- Dependencies: 198
+-- Data for Name: route; Type: TABLE DATA; Schema: navigation; Owner: postgres
+--
+
+INSERT INTO navigation.route VALUES ('f1_56', 'f1_57', 'b1_41', NULL, 'f1_55', NULL);
+INSERT INTO navigation.route VALUES ('f1_53', NULL, 'f1_54', NULL, 'f1_52', NULL);
+INSERT INTO navigation.route VALUES ('f1_54', 'b1_37', 'f1_55', NULL, 'f1_53', NULL);
+INSERT INTO navigation.route VALUES ('f1_1', 'b1_1', 'f1_2', 'b1_2', NULL, NULL);
+INSERT INTO navigation.route VALUES ('f1_51', 'b1_36', 'f1_52', NULL, 'f1_50', NULL);
+INSERT INTO navigation.route VALUES ('f1_52', NULL, 'f1_53', NULL, 'f1_51', NULL);
+INSERT INTO navigation.route VALUES ('f1_50', NULL, 'f1_51', NULL, 'f1_49', NULL);
+INSERT INTO navigation.route VALUES ('f1_48', 'b1_35', 'f1_49', NULL, 'f1_47', NULL);
+INSERT INTO navigation.route VALUES ('f1_49', NULL, 'f1_50', NULL, 'f1_48', NULL);
+INSERT INTO navigation.route VALUES ('f1_47', NULL, 'f1_48', NULL, 'f1_46', NULL);
+INSERT INTO navigation.route VALUES ('f1_55', NULL, 'f1_56', NULL, 'f1_54', NULL);
+INSERT INTO navigation.route VALUES ('f1_57', 'b1_38,b1_3', 'b1_40', 'f1_56', NULL, NULL);
+INSERT INTO navigation.route VALUES ('f1_5', NULL, 'f1_6', NULL, 'f1_4', NULL);
+INSERT INTO navigation.route VALUES ('f1_4', 'b1_6', 'f1_5', 'b1_5', 'f1_3', NULL);
+INSERT INTO navigation.route VALUES ('f1_8', 'b1_9', 'f1_9', NULL, 'f1_7', NULL);
+INSERT INTO navigation.route VALUES ('f1_12', 'b1_11', 'f1_13', NULL, 'f1_11', NULL);
+INSERT INTO navigation.route VALUES ('f1_11', NULL, 'f1_12', NULL, 'f1_10', NULL);
+INSERT INTO navigation.route VALUES ('f1_14', 'f1_15', 'b1_15', NULL, NULL, NULL);
+INSERT INTO navigation.route VALUES ('f1_13', NULL, 'f1_14', NULL, 'f1_12', NULL);
+INSERT INTO navigation.route VALUES ('f1_16', 'f1_14', NULL, 'f1_17', NULL, NULL);
+INSERT INTO navigation.route VALUES ('f1_15', 'b1_14', NULL, 'f1_14', NULL, NULL);
+INSERT INTO navigation.route VALUES ('f1_3', NULL, 'f1_4', NULL, 'f1_2', NULL);
+INSERT INTO navigation.route VALUES ('f1_2', 'b1_4', 'f1_3', 'b1_3', 'f1_1', NULL);
+INSERT INTO navigation.route VALUES ('f1_17', 'f1_16', NULL, 'f1_18', NULL, NULL);
+INSERT INTO navigation.route VALUES ('f1_22', 'b1_13', NULL, NULL, 'f1_19', NULL);
+INSERT INTO navigation.route VALUES ('f1_19', 'f1_18', 'f1_23', 'f1_20', 'f1_22', NULL);
+INSERT INTO navigation.route VALUES ('f1_21', 'f1_20', 'b1_19', NULL, NULL, NULL);
+INSERT INTO navigation.route VALUES ('f1_20', 'f1_19', NULL, 'f1_21', 'b1_20', NULL);
+INSERT INTO navigation.route VALUES ('f1_23', NULL, 'f1_24', 'b1_17,b1_1', 'f1_19', NULL);
+INSERT INTO navigation.route VALUES ('f1_29', NULL, 'f1_30', NULL, 'f1_28', NULL);
+INSERT INTO navigation.route VALUES ('f1_25', NULL, 'f1_26', 'b1_21', 'f1_24', NULL);
+INSERT INTO navigation.route VALUES ('f1_24', NULL, 'f1_25', NULL, 'f1_23', NULL);
+INSERT INTO navigation.route VALUES ('f1_27', NULL, 'f1_28', NULL, 'f1_26', NULL);
+INSERT INTO navigation.route VALUES ('f1_26', NULL, 'f1_27', NULL, 'f1_25', NULL);
+INSERT INTO navigation.route VALUES ('f1_18', 'f1_17', 'b1_16', 'f1_19', NULL, NULL);
+INSERT INTO navigation.route VALUES ('f1_28', NULL, 'f1_29', 'b1_21', 'f1_27', NULL);
+INSERT INTO navigation.route VALUES ('o_1', 'f1_21', 'o_2', NULL, NULL, NULL);
+INSERT INTO navigation.route VALUES ('o_2', NULL, 'o_3', NULL, 'o_1', NULL);
+INSERT INTO navigation.route VALUES ('o_3', 'b1_23', NULL, NULL, 'o_2', NULL);
+INSERT INTO navigation.route VALUES ('f1_31', NULL, 'f1_32', NULL, 'f1_30', NULL);
+INSERT INTO navigation.route VALUES ('f1_30', NULL, 'f1_31', NULL, 'f1_29', NULL);
+INSERT INTO navigation.route VALUES ('f1_37', 'f1_36', NULL, 'f1_38', NULL, NULL);
+INSERT INTO navigation.route VALUES ('f1_35', NULL, 'f1_36', NULL, 'f1_34', NULL);
+INSERT INTO navigation.route VALUES ('f1_32', NULL, 'f1_33', 'b1_23', 'f1_31', NULL);
+INSERT INTO navigation.route VALUES ('f1_33', NULL, 'f1_34', 'b1_24', 'f1_32', NULL);
+INSERT INTO navigation.route VALUES ('f1_34', NULL, 'f1_35', 'b1_26', 'f1_33', NULL);
+INSERT INTO navigation.route VALUES ('f1_39', 'f1_38', NULL, 'f1_40', NULL, NULL);
+INSERT INTO navigation.route VALUES ('f1_38', 'f1_37', 'b1_28', 'f1_39', 'b1_27', NULL);
+INSERT INTO navigation.route VALUES ('f1_36', 'b1_31', NULL, 'f1_37', 'f1_35', NULL);
+INSERT INTO navigation.route VALUES ('f1_41', 'f1_40', 'b1_30', NULL, NULL, NULL);
+INSERT INTO navigation.route VALUES ('f1_40', 'f1_39', 'b1_29', 'f1_41', NULL, NULL);
+INSERT INTO navigation.route VALUES ('f1_44', 'f1_45', NULL, 'f1_43', NULL, NULL);
+INSERT INTO navigation.route VALUES ('f1_43', 'f1_44', 'b1_42', 'f1_42', NULL, NULL);
+INSERT INTO navigation.route VALUES ('f1_42', 'f1_43', NULL, NULL, 'f1_36', NULL);
+INSERT INTO navigation.route VALUES ('f1_45', 'f1_46', NULL, 'f1_44', 'b1_32', NULL);
+INSERT INTO navigation.route VALUES ('f1_46', 'b1_34', NULL, 'f1_45', 'b1_33', NULL);
+INSERT INTO navigation.route VALUES ('f1_7', 'b1_7', 'f1_8', NULL, 'f1_6', NULL);
+INSERT INTO navigation.route VALUES ('f1_9', NULL, 'f1_10', NULL, 'f1_8', NULL);
+INSERT INTO navigation.route VALUES ('f1_6', NULL, 'f1_7', NULL, 'f1_5', NULL);
+INSERT INTO navigation.route VALUES ('b1_1', NULL, NULL, 'f1_1', NULL, 'Storage Room1');
+INSERT INTO navigation.route VALUES ('b1_2', 'f1_1', NULL, NULL, NULL, 'Toilet');
+INSERT INTO navigation.route VALUES ('b1_3', 'f1_2', NULL, NULL, NULL, 'MBE Room');
+INSERT INTO navigation.route VALUES ('b1_4', NULL, NULL, 'f1_2', NULL, 'Associate Dean Room');
+INSERT INTO navigation.route VALUES ('b1_5', 'f1_4', NULL, NULL, NULL, 'Conference Room 2');
+INSERT INTO navigation.route VALUES ('b1_6', NULL, NULL, 'f1_5', NULL, 'OD Room');
+INSERT INTO navigation.route VALUES ('b1_7', 'b1_8', 'b1_10', 'f1_7', NULL, 'Storage Room2');
+INSERT INTO navigation.route VALUES ('b1_8', NULL, NULL, 'b1_7', NULL, 'UPs Room');
+INSERT INTO navigation.route VALUES ('b1_9', NULL, NULL, 'f1_8', NULL, 'Storage Room3');
+INSERT INTO navigation.route VALUES ('b1_10', NULL, NULL, NULL, 'b1_6', 'Server Room');
+INSERT INTO navigation.route VALUES ('b1_11', NULL, NULL, 'f1_12', NULL, 'iThink Room');
+INSERT INTO navigation.route VALUES ('f1_10', NULL, 'f1_11', 'b1_12', 'f1_9', NULL);
+INSERT INTO navigation.route VALUES ('b1_16', NULL, NULL, NULL, 'f1_18', 'Toshiba Room');
+INSERT INTO navigation.route VALUES ('b1_15', NULL, NULL, NULL, 'f1_14', 'Room no. 124');
+INSERT INTO navigation.route VALUES ('b1_14', NULL, NULL, 'f1_15', NULL, 'Room no. 123');
+INSERT INTO navigation.route VALUES ('b1_13', NULL, NULL, 'f1_22', NULL, 'Amazon Cafe''');
+INSERT INTO navigation.route VALUES ('b1_12', 'f1_10', NULL, NULL, NULL, 'Conference Room 1');
+INSERT INTO navigation.route VALUES ('b1_18', 'f1_23', NULL, NULL, NULL, 'copy shop');
+INSERT INTO navigation.route VALUES ('b1_17', 'f1_23', NULL, NULL, NULL, 'Stair floor1');
+INSERT INTO navigation.route VALUES ('b1_21', 'f1_28', NULL, NULL, NULL, 'Conference Hall');
+INSERT INTO navigation.route VALUES ('b1_42', NULL, NULL, NULL, 'f1_43', 'Elevator floor1');
+INSERT INTO navigation.route VALUES ('b1_20', NULL, 'f1_20', NULL, NULL, 'Elevator floor1');
+INSERT INTO navigation.route VALUES ('b1_19', NULL, NULL, NULL, 'f1_21', 'Prayer Room');
+INSERT INTO navigation.route VALUES ('b1_29', NULL, NULL, NULL, 'f1_40', 'System Room');
+INSERT INTO navigation.route VALUES ('b1_30', NULL, NULL, NULL, 'f1_41', 'Toilet(M)');
+INSERT INTO navigation.route VALUES ('b1_23', 'f1_32', NULL, 'b1_25', NULL, 'Conference Room 116/3');
+INSERT INTO navigation.route VALUES ('b1_24', 'f1_33', NULL, NULL, NULL, 'Hall of Frame');
+INSERT INTO navigation.route VALUES ('b1_22', NULL, NULL, 'o_3', NULL, 'Toilet');
+INSERT INTO navigation.route VALUES ('b1_27', NULL, 'f1_38', NULL, NULL, 'Stair floor1');
+INSERT INTO navigation.route VALUES ('b1_28', NULL, NULL, NULL, 'f1_38', 'Toilet(F)');
+INSERT INTO navigation.route VALUES ('b1_25', 'b1_23', NULL, NULL, NULL, 'Conference Room 116/2');
+INSERT INTO navigation.route VALUES ('b1_26', 'f1_34', NULL, NULL, NULL, 'Engineering museum');
+INSERT INTO navigation.route VALUES ('b1_41', NULL, NULL, NULL, 'f1_56', 'Office of Student Affairs');
+INSERT INTO navigation.route VALUES ('b1_40', NULL, NULL, NULL, 'f1_57', 'Staff Room');
+INSERT INTO navigation.route VALUES ('b1_39', NULL, NULL, 'f1_57', NULL, 'Toilet Staff');
+INSERT INTO navigation.route VALUES ('b1_32', NULL, 'f1_45', NULL, NULL, 'Academic Affairs Director room');
+INSERT INTO navigation.route VALUES ('b1_31', NULL, NULL, 'f1_36', NULL, 'Registeration Room');
+INSERT INTO navigation.route VALUES ('b1_34', NULL, NULL, 'f1_46', NULL, 'Dean Room');
+INSERT INTO navigation.route VALUES ('b1_33', NULL, 'f1_46', NULL, NULL, 'Secretary Room');
+INSERT INTO navigation.route VALUES ('b1_36', NULL, NULL, 'f1_51', NULL, 'Physical Management Room');
+INSERT INTO navigation.route VALUES ('b1_35', NULL, NULL, 'f1_48', NULL, 'HR Room');
+INSERT INTO navigation.route VALUES ('b1_38', NULL, NULL, 'f1_57', NULL, 'Stairs floor1');
+INSERT INTO navigation.route VALUES ('b1_37', NULL, NULL, 'f1_53', NULL, 'Financial and Supplies Room');
+
+
+--
+-- TOC entry 2805 (class 0 OID 16395)
+-- Dependencies: 197
+-- Data for Name: building; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+
+
+--
+-- TOC entry 2818 (class 0 OID 0)
+-- Dependencies: 199
+-- Name: object_o_id_seq; Type: SEQUENCE SET; Schema: navigation; Owner: postgres
+--
+
+SELECT pg_catalog.setval('navigation.object_o_id_seq', 48, true);
+
+
+--
+-- TOC entry 2683 (class 2606 OID 16493)
+-- Name: object object_pkey; Type: CONSTRAINT; Schema: navigation; Owner: postgres
+--
+
+ALTER TABLE ONLY navigation.object
+    ADD CONSTRAINT object_pkey PRIMARY KEY (o_id);
+
+
+--
+-- TOC entry 2681 (class 2606 OID 16457)
+-- Name: route route_pkey; Type: CONSTRAINT; Schema: navigation; Owner: postgres
+--
+
+ALTER TABLE ONLY navigation.route
+    ADD CONSTRAINT route_pkey PRIMARY KEY (id);
+
+
+-- Completed on 2018-04-04 14:54:17
+
+--
+-- PostgreSQL database dump complete
+--
+
