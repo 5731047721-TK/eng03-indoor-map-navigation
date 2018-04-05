@@ -14,9 +14,12 @@ class FloorOne extends React.Component {
   
     onClick(e){
       if(e){
-        window.location = '/api/1/' + e.target.id
+        var pathid = e.target.id
+        var pattern = /path/ig
+        pathid = pathid.replace(pattern, '')
+        window.location = '/api/1/' + pathid
         //if(e.target.id === 'path25') this.setState( {Color:"	#FFA07A",})
-        //alert(e.target.id);
+        alert(pathid);
         console.log(e.target.id)
       }
     }

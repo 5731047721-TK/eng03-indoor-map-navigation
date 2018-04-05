@@ -37,6 +37,18 @@ function lookUpPath(req, res, next){
   })
 }
 
+function navigate(req, res, next){
+  var spawn = require("child_process").spawn
+  var from = req.query.path_from
+  var to = req.query.path_to
+  var table = 'navigation'
+  var process = spawn('python', ["./navigate.py", from, to, table])
+
+  process.stdout.on('data', function(data){
+    res.send(data.toString);
+  })
+}
+
 // Multi-process to utilize all CPU cores.
 if (cluster.isMaster) {
   console.error(`Node cluster master ${process.pid} is running`);
