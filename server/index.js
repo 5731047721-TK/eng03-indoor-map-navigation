@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const path = require('path');
+const Graph = require('node-dijkstra')
 const cluster = require('cluster');
 const numCPUs = require('os').cpus().length;
 const pg = require('pg');
@@ -14,12 +15,49 @@ const pool = new Pool({
       // ssl: true,
   });
 
+const pathNode = new Graph()
+
+function onStart(req, res){
+  var sql = 'SELECT * FROM route LEFT JOIN object ON location = id'
+  pool.query(sql, function(err, results){
+    if(err){
+      console.error(err);
+      res.statusCode = 500;
+      pool.end();
+      return res.json({ errors: ['Cannot find table']})
+    }
+    if(results.rows.length === 0){
+      res.statusCode = 404;
+      pool.end();
+      return res.json({ errors: ['Path not found']})
+    }
+    //pool.end();
+    //console.log('Query Successfully ', results.rows.length);
+    // console.log(results.rows[0])
+    for(var i =0; i < results.rows.length; i++){
+        var North = results.rows[i].N
+        var East = results.rows[i].E
+        var South = results.rows[i].S
+        var West = results.rows[i].W
+        var data = {};
+        data[North] = 1;
+        data[East] = 1;
+        data[South] = 1;
+        data[West] = 1;
+        console.log(results.rows[i].id, data);
+        pathNode.addNode(results.rows[i].id, data);
+    }
+    console.log(pathNode);
+    console.log(pathNode.path('f1_56', 'f1_15'))
+  })
+}
+
 function lookUpPath(req, res, next){
   var id = req.params.path_id
   var floor = req.params.floor_id
 
   var sql = 'SELECT * FROM navigation WHERE id = ?'
-  pool.query(sql,[id], function(err, results){
+  pool.query(sql, [id], function(err, results){
     if(err){
       console.error(err);
       res.statusCode = 500;
@@ -32,22 +70,22 @@ function lookUpPath(req, res, next){
       return res.json({ errors: ['Path not found']})
     }
     req.node = results.rows[0];
-    pool.end();
+    //pool.end();
     next();
   })
 }
 
-function navigate(req, res, next){
-  var spawn = require("child_process").spawn
-  var from = req.query.path_from
-  var to = req.query.path_to
-  var table = 'navigation'
-  var process = spawn('python', ["./navigate.py", from, to, table])
+// function navigate(req, res, next){
+//   var spawn = require("child_process").spawn
+//   var from = req.query.path_from
+//   var to = req.query.path_to
+//   var table = 'navigation'
+//   var process = spawn('python', ["../routing.py", from, to, table])
 
-  process.stdout.on('data', function(data){
-    res.send(data.toString);
-  })
-}
+//   process.stdout.on('data', function(data){
+//     res.send(data.toString);
+//   })
+// }
 
 // Multi-process to utilize all CPU cores.
 if (cluster.isMaster) {
@@ -64,7 +102,7 @@ if (cluster.isMaster) {
 
 } else {
 
-  
+  onStart();
     
   const app = express();
   
