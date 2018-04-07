@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+// const url = require('url');
 const path = require('path');
 const Graph = require('node-dijkstra')
 const cluster = require('cluster');
@@ -16,24 +17,18 @@ const pool = new Pool({
   });
 
 const pathNode = new Graph()
-
-function onStart(req, res){
+var testy = ''
+function onStart(){
   var sql = 'SELECT * FROM route LEFT JOIN object ON location = id'
   pool.query(sql, function(err, results){
     if(err){
       console.error(err);
-      res.statusCode = 500;
       pool.end();
-      return res.json({ errors: ['Cannot find table']})
     }
     if(results.rows.length === 0){
-      res.statusCode = 404;
+      console.log('Error 404, Data not found')
       pool.end();
-      return res.json({ errors: ['Path not found']})
     }
-    //pool.end();
-    //console.log('Query Successfully ', results.rows.length);
-    // console.log(results.rows[0])
     for(var i =0; i < results.rows.length; i++){
         var North = results.rows[i].N
         var East = results.rows[i].E
@@ -44,13 +39,14 @@ function onStart(req, res){
         data[East] = 1;
         data[South] = 1;
         data[West] = 1;
-        console.log(results.rows[i].id, data);
         pathNode.addNode(results.rows[i].id, data);
     }
-    console.log(pathNode);
-    console.log(pathNode.path('f1_56', 'f1_15'))
+    testy = results.rows[0].id;
+    // console.log(pathNode.path('f1_56', 'f1_15'))
   })
 }
+
+
 
 function lookUpPath(req, res, next){
   var id = req.params.path_id
@@ -75,17 +71,15 @@ function lookUpPath(req, res, next){
   })
 }
 
-// function navigate(req, res, next){
-//   var spawn = require("child_process").spawn
-//   var from = req.query.path_from
-//   var to = req.query.path_to
-//   var table = 'navigation'
-//   var process = spawn('python', ["../routing.py", from, to, table])
+function navigate(req, res, next){
+  var fromPath = req.params.from_id
+  var toPath = req.params.to_id
 
-//   process.stdout.on('data', function(data){
-//     res.send(data.toString);
-//   })
-// }
+
+  console.log(fromPath, toPath, testy)
+  res.json(pathNode.path(fromPath, toPath));
+  next();
+}
 
 // Multi-process to utilize all CPU cores.
 if (cluster.isMaster) {
@@ -109,7 +103,7 @@ if (cluster.isMaster) {
   // Priority serve any static files.
   app.use(express.static(path.resolve(__dirname, '../react-ui/build')));
 
-  router.get('/:floor_id/:path_id', lookUpPath, (req, res) =>{
+  router.get('/:from_id/:to_id', navigate, (req, res) =>{
     // const results = []
     // const id = req.params.path_id
     // const floor = req.params.floor_id
@@ -127,7 +121,7 @@ if (cluster.isMaster) {
     //     return res.json(results)
     //   }
     // })
-    res.json(req.node)
+    // res.json(req.node)
     // res.end()
   })
 
