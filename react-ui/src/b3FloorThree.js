@@ -25,7 +25,7 @@ export default class FloorThree extends React.Component {
       <div className="game">
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        id="us-map"
+        id="map"
         preserveAspectRatio="xMinYMin meet"
         version="1.1"
         viewBox="0 0 477.8375 129.91041"

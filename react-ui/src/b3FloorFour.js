@@ -25,7 +25,7 @@ export default class FloorFour extends React.Component {
       <div className="game">
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          id="us-map"
+          id="map"
           preserveAspectRatio="xMinYMin meet"
           version="1.1"
           viewBox="0 0 484.45209 133.87916"

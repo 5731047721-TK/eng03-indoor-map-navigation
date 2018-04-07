@@ -29,16 +29,6 @@ class FloorBox extends React.Component {
      return(
        <div>
         {m}
-      <div className="mapboxgl-ctrl-bottom-left" style={{zIndex:1}}>
-        <div className="mazemap-control-zlevel-bar custom-zlevel-bar mapboxgl-ctrl-group mapboxgl-ctrl" >
-          <div className="btns-container flex-container">
-          <button className="z-label" onClick={this.handleClick} title="4">4</button>
-          <button className="z-label" onClick={this.handleClick} title="3">3</button>
-          <button className="z-label" onClick={this.handleClick} title="2">2</button>
-          <button className="z-label" onClick={this.handleClick} title="1">1</button>
-          </div>
-        </div>
-      </div>
       </div>
     );
   }

@@ -1,7 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import FloorOne from './b3FloorOne.js';
+import HeaderNavigation from './HeaderNavigation'
+import { Container, Row, Col } from 'reactstrap';
 import './index.css';
-import FloorBox from './Floorbar.js';
+import 'bootstrap/dist/css/bootstrap.css';
+
 
 // ========================================
 class App extends React.Component {
@@ -14,13 +18,18 @@ class App extends React.Component {
         };
     }
   render() {
-
       return (
-          <div className='App'>
-              <div>
-              <FloorBox/>
-              </div>
-          </div>
+        <Container>
+                <Row>
+                    <HeaderNavigation />
+                    
+                </Row>
+                
+                    <FloorOne />
+                    
+                
+
+         </Container>
       );
   }
 }
