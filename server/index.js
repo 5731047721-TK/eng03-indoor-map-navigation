@@ -17,7 +17,8 @@ const pool = new Pool({
   });
 
 const pathNode = new Graph()
-var testy = ''
+const navigateNode = new Map()
+
 function onStart(){
   var sql = 'SELECT * FROM route LEFT JOIN object ON location = id'
   pool.query(sql, function(err, results){
@@ -34,15 +35,41 @@ function onStart(){
         var East = results.rows[i].E
         var South = results.rows[i].S
         var West = results.rows[i].W
+        var Desc = results.rows[i].Description
+        var cat = results.rows[i].category
+        var dir = results.rows[i].direction
         var data = {};
         data[North] = 1;
         data[East] = 1;
         data[South] = 1;
         data[West] = 1;
         pathNode.addNode(results.rows[i].id, data);
+        var dataNavigate = new Map();
+        var category = new Map();
+        if(North !== null) dataNavigate.set(North, 'N');
+        if(East !== null) dataNavigate.set(East, 'E');
+        if(South !== null) dataNavigate.set(South, 'S');
+        if(West !== null) dataNavigate.set(West, 'W');
+        dataNavigate.set('Description', Desc)
+        var catarr = []
+        if(navigateNode.get(results.rows[i].id) != null){
+          console.log('somethings here!')
+          catarr = navigateNode.get(results.rows[i].id).get('Category');  
+        }
+        if(cat !== null && dir !== null) catarr.push([cat, dir])
+        dataNavigate.set('Category', catarr)
+        navigateNode.set(results.rows[i].id, dataNavigate);
+        // console.log(results.rows[i].id, catarr)
     }
-    testy = results.rows[0].id;
-    // console.log(pathNode.path('f1_56', 'f1_15'))
+    // console.log(navigateNode)
+    // var pathResult = pathNode.path('f1_56', 'f1_15')
+    // if(pathResult != null){
+    //   var direction = [];
+    //   for(var i =0;i < pathResult.length-1;i++){
+    //     direction[i] = navigateNode.get(pathResult[i]).get(pathResult[i+1]);
+    //   }
+    //   console.log(direction)
+    // }
   })
 }
 
@@ -75,9 +102,17 @@ function navigate(req, res, next){
   var fromPath = req.params.from_id
   var toPath = req.params.to_id
 
-
-  console.log(fromPath, toPath, testy)
-  res.json(pathNode.path(fromPath, toPath));
+  var pathResult = pathNode.path(fromPath, toPath)
+  if(pathResult != null){
+    var direction = [];
+    for(var i =0;i < pathResult.length-1;i++){
+      direction.push(navigateNode.get(pathResult[i]).get('Category'));
+      direction.push(navigateNode.get(pathResult[i]).get(pathResult[i+1]));
+    }
+    console.log(pathResult)
+  }
+  // console.log(fromPath, toPath, testy)
+  res.json(direction);
   next();
 }
 
@@ -134,22 +169,22 @@ if (cluster.isMaster) {
   // });
 
   // Test db
-  app.get('/db', function(request, response){
-    pool.query('SELECT * FROM node', function(err, result){
-      console.log('log message below\n', err, result)
-      console.log('Database string below\n', pool.connectionString, process.env.DATABASE_URL)
-      if(err){
-        console.error(err)
-        response.send("Error from query > " + err)
-      } else{
-        console.log('Query successfully, rendering results')
-        console.log({results: result.rows})
-        // response.render({results: result.rows})
-      }
-      pool.end()
-    })
-    response.end()
-  });
+  // app.get('/db', function(request, response){
+  //   pool.query('SELECT * FROM node', function(err, result){
+  //     console.log('log message below\n', err, result)
+  //     console.log('Database string below\n', pool.connectionString, process.env.DATABASE_URL)
+  //     if(err){
+  //       console.error(err)
+  //       response.send("Error from query > " + err)
+  //     } else{
+  //       console.log('Query successfully, rendering results')
+  //       console.log({results: result.rows})
+  //       // response.render({results: result.rows})
+  //     }
+  //     pool.end()
+  //   })
+  //   response.end()
+  // });
 
   // All remaining requests return the React app, so it can handle routing.
   app.get('*', function(request, response) {
