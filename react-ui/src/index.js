@@ -1,6 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import FloorOne from './b3FloorOne.js';
+import FloorTwo from './b3FloorTwo.js';
+import FloorThree from './b3FloorThree.js';
+import FloorFour from './b3FloorFour.js';
 import HeaderNavigation from './HeaderNavigation'
 import { Container, Row, Col } from 'reactstrap';
 import './index.css';
@@ -25,7 +28,7 @@ class App extends React.Component {
                     
                 </Row>
                 
-                    <FloorOne />
+                    <FloorTwo />
                     
                 
 
