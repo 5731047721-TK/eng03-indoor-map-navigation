@@ -28,7 +28,7 @@ class App extends React.Component {
                     
                 </Row>
                 
-                    <FloorTwo />
+                    <FloorOne />
                     
                 
 
