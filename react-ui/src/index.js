@@ -20,6 +20,7 @@ class App extends React.Component {
             isNavi: false,
         };
     }
+    
   render() {
       return (
         <Container>
@@ -28,7 +29,7 @@ class App extends React.Component {
                     
                 </Row>
                 
-                    <FloorOne />
+                    <FloorTwo />
                     
                 
 

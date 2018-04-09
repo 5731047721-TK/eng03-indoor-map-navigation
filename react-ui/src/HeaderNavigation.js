@@ -47,11 +47,12 @@ class HeaderNavigation extends Component {
             <Container>
                 <Row>
                     <Col sm="1"><img src={process.env.PUBLIC_URL + '/favicon.ico'} height="42" width="40" /></Col>
-                    <Col ><span>{nav}</span></Col>
+                    <Col >{nav}</Col>
                 </Row>
                 <Row>
                     <Col sm="8"><h1> Eng03-indoor-map </h1></Col>
-                    <Col sm="4"><form>
+                    <Col sm="4">
+                    <form>
                         <label>
                             Start:
                             <input type="text" name="name" />
