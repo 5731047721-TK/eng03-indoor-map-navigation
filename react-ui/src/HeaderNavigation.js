@@ -12,13 +12,34 @@ class HeaderNavigation extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isOwner: true,
+            startPoint: '',
+            endPoint: '',
             navStatus: ""
         }
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    handleChange(event) {
+        this.setState({[event.target.id]: event.target.value});
     }
 
     handleClick(e, tab) {
         this.setState({ navStatus: tab })
+        
+    }
+
+    handleSubmit(event) {
+        event.preventDefault();
+
+        var pathsid = this.state.startPoint
+        var patheid = this.state.endPoint
+        var pattern = /path/ig
+        pathsid = pathsid.replace(pattern, '')
+        patheid = patheid.replace(pattern, '')
+        //location.href = '/api/1/' + pathid
+        window.location = '/api/' + pathsid +'/'+patheid
+        
     }
 
     render() {
@@ -52,15 +73,16 @@ class HeaderNavigation extends Component {
                 <Row>
                     <Col sm="8"><h1> Eng03-indoor-map </h1></Col>
                     <Col sm="4">
-                    <form>
-                        <label>
-                            Start:
-                            <input type="text" name="name" />
+                    <form onSubmit={this.handleSubmit.bind(this)}>
+                        <label  text='Start:' size='3'>
+                            
+                            <input  id="startPoint"  placeholder='Start point' value={this.state.startPoint} onChange={this.handleChange} size='4' />
                         </label>
-                        <label>
-                            End  :
-                            <input type="text" name="name" />
+                        <label  text='End  :' size='3'> 
+                            
+                            <input id="endPoint"  ref="EndInput" placeholder='End Point' value={this.state.endPoint} onChange={this.handleChange} size='4' />
                         </label>
+                        <input type="submit" value="Submit" />
                         </form>
                     </Col>
                 </Row>
