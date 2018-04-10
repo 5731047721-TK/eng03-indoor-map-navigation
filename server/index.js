@@ -25,6 +25,7 @@ function onStart(){
     if(err){
       console.error(err);
       pool.end();
+      return;
     }
     if(results.rows.length === 0){
       console.log('Error 404, Data not found')
@@ -46,14 +47,14 @@ function onStart(){
         pathNode.addNode(results.rows[i].id, data);
         var dataNavigate = new Map();
         var category = new Map();
-        if(North !== null) dataNavigate.set(North, 'N');
-        if(East !== null) dataNavigate.set(East, 'E');
-        if(South !== null) dataNavigate.set(South, 'S');
-        if(West !== null) dataNavigate.set(West, 'W');
+        if(North !== null) dataNavigate.set(North, 'North');
+        if(East !== null) dataNavigate.set(East, 'East');
+        if(South !== null) dataNavigate.set(South, 'South');
+        if(West !== null) dataNavigate.set(West, 'West');
         dataNavigate.set('Description', Desc)
         var catarr = []
         if(navigateNode.get(results.rows[i].id) != null){
-          console.log('somethings here!')
+          // console.log('somethings here!')
           catarr = navigateNode.get(results.rows[i].id).get('Category');  
         }
         if(cat !== null && dir !== null) catarr.push([cat, dir])
@@ -112,6 +113,12 @@ function navigate(req, res, next){
     console.log(pathResult)
   }
   // console.log(fromPath, toPath, testy)
+  for(var i = 0; i < direction.length; i++){
+      if(i===1){
+
+      }
+  }
+  
   res.json(direction);
   next();
 }
