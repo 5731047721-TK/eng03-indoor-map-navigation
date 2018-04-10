@@ -14,10 +14,12 @@ class HeaderNavigation extends Component {
         this.state = {
             startPoint: '',
             endPoint: '',
+            data: [],
             navStatus: ""
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.onClick = this.onClick.bind(this);
     }
 
     handleChange(event) {
@@ -32,15 +34,32 @@ class HeaderNavigation extends Component {
     handleSubmit(event) {
         event.preventDefault();
 
+
         var pathsid = this.state.startPoint
         var patheid = this.state.endPoint
-        var pattern = /path/ig
-        pathsid = pathsid.replace(pattern, '')
-        patheid = patheid.replace(pattern, '')
         //location.href = '/api/1/' + pathid
-        window.location = '/api/' + pathsid +'/'+patheid
-        
+        //window.location = '/api/' + pathsid +'/'+patheid
+        var path = 'api/' + pathsid +'/'+patheid
+        fetch(path)
+        .then((Response) => Response.json())
+        .then((res) => {
+          //console.log(res)
+          this.setState({
+            data: res,
+          })
+        })
+        console.log(this.state.data);
     }
+
+    onClick(e){
+        if(e){
+          
+          //if(e.target.id === 'path25') this.setState( {Color:"	#FFA07A",})
+          alert(this.state.data);
+          console.log(this.state.data);
+          // console.log(this.State.Color)
+        }
+      }
 
     render() {
         let nav;
@@ -50,7 +69,7 @@ class HeaderNavigation extends Component {
                 <NavLink href="/" >Home</NavLink>
             </NavItem>
             <NavItem>
-                <NavLink href="/floor1">floor1</NavLink>
+                <NavLink onClick={this.onClick} href="/floor1">floor1</NavLink>
             </NavItem>
             <NavItem>
                 <NavLink href="/floor2">floor2</NavLink>
