@@ -25,6 +25,7 @@ function onStart(){
     if(err){
       console.error(err);
       pool.end();
+      return;
     }
     if(results.rows.length === 0){
       console.log('Error 404, Data not found')
@@ -46,14 +47,14 @@ function onStart(){
         pathNode.addNode(results.rows[i].id, data);
         var dataNavigate = new Map();
         var category = new Map();
-        if(North !== null) dataNavigate.set(North, 'N');
-        if(East !== null) dataNavigate.set(East, 'E');
-        if(South !== null) dataNavigate.set(South, 'S');
-        if(West !== null) dataNavigate.set(West, 'W');
+        if(North !== null) dataNavigate.set(North, 'North');
+        if(East !== null) dataNavigate.set(East, 'East');
+        if(South !== null) dataNavigate.set(South, 'South');
+        if(West !== null) dataNavigate.set(West, 'West');
         dataNavigate.set('Description', Desc)
         var catarr = []
         if(navigateNode.get(results.rows[i].id) != null){
-          console.log('somethings here!')
+          // console.log('somethings here!')
           catarr = navigateNode.get(results.rows[i].id).get('Category');  
         }
         if(cat !== null && dir !== null) catarr.push([cat, dir])
@@ -103,6 +104,7 @@ function navigate(req, res, next){
   var toPath = req.params.to_id
 
   var pathResult = pathNode.path(fromPath, toPath)
+  
   if(pathResult != null){
     var direction = [];
     for(var i =0;i < pathResult.length-1;i++){
@@ -110,9 +112,70 @@ function navigate(req, res, next){
       direction.push(navigateNode.get(pathResult[i]).get(pathResult[i+1]));
     }
     console.log(pathResult)
+    var directionText = [];
+    var compass = new Map();
+    compass.set('North',0);
+    compass.set('East',1);
+    compass.set('South',2);
+    compass.set('West',3);
+    compass.set('N', 'North');
+    compass.set('E', 'East');
+    compass.set('W', 'West');
+    compass.set('S', 'South');
+    var compassnow = 0
+    for(var i = 0; i < direction.length; i++){
+      if(i%2===0){
+        if(direction[i].length > 0){
+            console.log('Saw object', direction[i])
+            var texttemp = 'You can see ';
+            for(var j=0;j<direction[i].length;j++){
+                if(j !== direction[i].length-1){
+                  texttemp += direction[i][j][0] + ' on the ' + compass.get(direction[i][j][1]) + ', ';
+                }else{
+                  texttemp += direction[i][j][0] + ' on the ' + compass.get(direction[i][j][1]);
+                }
+            }
+            directionText.push(texttemp);
+        }
+      }
+      else if(i===1){
+        directionText.push('Face ' + direction[i]);
+        compassnow = compass.get(direction[i]);
+      }else {
+        var compassnew = compass.get(direction[i]);
+        if(compassnow === compassnew){
+          directionText.push('Go straight');
+        }else if((compassnew - compassnow)%3 > 0){
+          compassnow = compass.get(direction[i]);
+          directionText.push('Turn right');
+        }else{
+          compassnow = compass.get(direction[i]);
+          directionText.push('Turn left');
+        }
+        if(i===direction.length-1){
+          var lasttext = directionText.pop();
+          if(lasttext==='Go straight'){
+            directionText.push('Your place is in front of you');
+          }else if(lasttext==='Turn right'){
+            directionText.push('Your place is on the right');
+          }else if(lasttext==='Turn left'){
+            directionText.push('Your place is on the left');
+          }else{
+            console.log(lasttext);
+          }
+          // directionText.push('Your place is on') 
+        }
+        console.log(direction)
+      }
+    }
+  }else{
+    res.json({'Error':'404', 'Detail':'Path not found'})
+    next();
   }
   // console.log(fromPath, toPath, testy)
-  res.json(direction);
+  
+  
+  res.json(directionText);
   next();
 }
 
