@@ -5,7 +5,7 @@ import FloorTwo from './b3FloorTwo.js';
 import FloorThree from './b3FloorThree.js';
 import FloorFour from './b3FloorFour.js';
 import HeaderNavigation from './HeaderNavigation'
-import { Container, Row, Col } from 'reactstrap';
+import { Container, Row } from 'reactstrap';
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.css';
 
@@ -22,6 +22,13 @@ class App extends React.Component {
     }
     
   render() {
+      let m = null
+      //console.log(window.location.pathname)
+      if(window.location.pathname == '/floor1') m = <FloorOne />
+      else if(window.location.pathname == '/floor2') m = <FloorTwo />
+      else if(window.location.pathname == '/floor3') m = <FloorThree />
+      else if(window.location.pathname == '/floor4') m = <FloorFour />
+      else m = <FloorOne />
       return (
         <Container>
                 <Row>
@@ -29,7 +36,7 @@ class App extends React.Component {
                     
                 </Row>
                 
-                    <FloorOne />
+                    {m}
                     
                 
 
