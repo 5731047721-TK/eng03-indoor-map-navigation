@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { Nav, NavItem, NavLink } from 'reactstrap';
 import { Container, Row, Col } from 'reactstrap';
-
+import { Form,Label,Input } from 'reactstrap';
 
 
 
@@ -69,7 +69,7 @@ class HeaderNavigation extends Component {
                 <NavLink href="/" >Home</NavLink>
             </NavItem>
             <NavItem>
-                <NavLink onClick={this.onClick} href="/floor1">floor1</NavLink>
+                <NavLink href="/floor1">floor1</NavLink>
             </NavItem>
             <NavItem>
                 <NavLink href="/floor2">floor2</NavLink>
@@ -92,17 +92,17 @@ class HeaderNavigation extends Component {
                 <Row>
                     <Col sm="8"><h1> Eng03-indoor-map </h1></Col>
                     <Col sm="4">
-                    <form onSubmit={this.handleSubmit.bind(this)}>
-                        <label  text='Start:' size='3'>
+                    <Form onSubmit={this.handleSubmit.bind(this)}>
+                        <Label  text='Start:' size='3'>
                             
-                            <input  id="startPoint"  placeholder='Start point' value={this.state.startPoint} onChange={this.handleChange} size='4' />
-                        </label>
-                        <label  text='End  :' size='3'> 
+                            <Input  id="startPoint"  placeholder='Start point' value={this.state.startPoint} onChange={this.handleChange} size='8' />
+                        </Label>
+                        <Label  text='End  :' size='3'> 
                             
-                            <input id="endPoint"  ref="EndInput" placeholder='End Point' value={this.state.endPoint} onChange={this.handleChange} size='4' />
-                        </label>
-                        <input type="submit" value="Submit" />
-                        </form>
+                            <Input id="endPoint"  ref="EndInput" placeholder='End Point' value={this.state.endPoint} onChange={this.handleChange} size='8' />
+                        </Label>
+                        <Input type="submit" value="Submit" />
+                        </Form>
                     </Col>
                 </Row>
                 <Row>
