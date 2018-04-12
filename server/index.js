@@ -36,6 +36,8 @@ function onStart(){
         var East = results.rows[i].E
         var South = results.rows[i].S
         var West = results.rows[i].W
+        var Up = results.rows[i].Up
+        var Down = results.rows[i].Down
         var Desc = results.rows[i].Description
         var cat = results.rows[i].category
         var dir = results.rows[i].direction
@@ -51,6 +53,8 @@ function onStart(){
         if(East !== null) dataNavigate.set(East, 'East');
         if(South !== null) dataNavigate.set(South, 'South');
         if(West !== null) dataNavigate.set(West, 'West');
+        if(Up !== null) dataNavigate.set(Up, 'Up');
+        if(Down !== null) dataNavigate.set(Down, 'Down');
         dataNavigate.set('Description', Desc)
         var catarr = []
         if(navigateNode.get(results.rows[i].id) != null){
@@ -75,30 +79,6 @@ function onStart(){
 }
 
 
-
-function lookUpPath(req, res, next){
-  var id = req.params.path_id
-  var floor = req.params.floor_id
-
-  var sql = 'SELECT * FROM navigation WHERE id = ?'
-  pool.query(sql, [id], function(err, results){
-    if(err){
-      console.error(err);
-      res.statusCode = 500;
-      pool.end();
-      return res.json({ errors: ['Cannot find table']})
-    }  
-    if(results.rows.length === 0){
-      res.statusCode = 404;
-      pool.end();
-      return res.json({ errors: ['Path not found']})
-    }
-    req.node = results.rows[0];
-    //pool.end();
-    next();
-  })
-}
-
 function navigate(req, res, next){
   var fromPath = req.params.from_id
   var toPath = req.params.to_id
@@ -122,17 +102,43 @@ function navigate(req, res, next){
     compass.set('E', 'East');
     compass.set('W', 'West');
     compass.set('S', 'South');
+    compass.set('Up', -1);
+    compass.set('Down', -2);
     var compassnow = 0
+    var stillStraight = false;
     for(var i = 0; i < direction.length; i++){
       if(i%2===0){
         if(direction[i].length > 0){
-            console.log('Saw object', direction[i])
+            // console.log('Saw object', direction[i])
+            stillStraight = false;
             var texttemp = 'You can see ';
             for(var j=0;j<direction[i].length;j++){
                 if(j !== direction[i].length-1){
-                  texttemp += direction[i][j][0] + ' on the ' + compass.get(direction[i][j][1]) + ', ';
+                  if(i===0){
+                    texttemp += direction[i][j][0] + ' on the ' + compass.get(direction[i][j][1]) + ', ';
+                  } else {
+                    var compassnew = compass.get(direction[i][j][1]);
+                    if(compassnow === compassnew){
+                      texttemp += direction[i][j][0] + ' in front of you, '
+                    }else if((compassnew - compassnow)%3 > 0){
+                      texttemp += direction[i][j][0] + ' on your right, '
+                    }else{
+                      texttemp += direction[i][j][0] + ' on your left, '
+                    }
+                  }
                 }else{
-                  texttemp += direction[i][j][0] + ' on the ' + compass.get(direction[i][j][1]);
+                  if(i===0){
+                    texttemp += direction[i][j][0] + ' on the ' + compass.get(direction[i][j][1]);
+                  } else {
+                    var compassnew = compass.get(direction[i][j][1]);
+                    if(compassnow === compassnew){
+                      texttemp += direction[i][j][0] + ' in front of you'
+                    }else if((compassnew - compassnow)%3 > 0){
+                      texttemp += direction[i][j][0] + ' on your right'
+                    }else{
+                      texttemp += direction[i][j][0] + ' on your left'
+                    }
+                  }
                 }
             }
             directionText.push(texttemp);
@@ -143,14 +149,24 @@ function navigate(req, res, next){
         compassnow = compass.get(direction[i]);
       }else {
         var compassnew = compass.get(direction[i]);
+        // console.log(compassnew, compassnow, (compassnew - compassnow)%3)
         if(compassnow === compassnew){
-          directionText.push('Go straight');
+          if( !stillStraight) directionText.push('Go straight');
+          stillStraight = true;
+        }else if(compassnew === -1 || compassnew === -2){
+          compassnow = (compassnow+2)%3
+          directionText.push('Go ' + direction[i] + ' the stair');
+          stillStraight = false;
         }else if((compassnew - compassnow)%3 > 0){
+          // console.log('right!',compassnew, compassnow)
           compassnow = compass.get(direction[i]);
           directionText.push('Turn right');
-        }else{
+          stillStraight = false;
+        }else if((compassnew - compassnow)%3 < 0){
+          // console.log('left!',compassnew, compassnow)
           compassnow = compass.get(direction[i]);
           directionText.push('Turn left');
+          stillStraight = false;
         }
         if(i===direction.length-1){
           var lasttext = directionText.pop();
@@ -165,7 +181,7 @@ function navigate(req, res, next){
           }
           // directionText.push('Your place is on') 
         }
-        console.log(direction)
+        //console.log(direction)
       }
     }
   }else{
