@@ -36,8 +36,8 @@ function onStart(){
         var East = results.rows[i].E
         var South = results.rows[i].S
         var West = results.rows[i].W
-        var Up = results.rows[i].Up
-        var Down = results.rows[i].Down
+        var Up = results.rows[i].up
+        var Down = results.rows[i].down
         var Desc = results.rows[i].Description
         var cat = results.rows[i].category
         var dir = results.rows[i].direction
@@ -46,6 +46,8 @@ function onStart(){
         data[East] = 1;
         data[South] = 1;
         data[West] = 1;
+        data[Up] = 1;
+        data[Down] = 1;
         pathNode.addNode(results.rows[i].id, data);
         var dataNavigate = new Map();
         var category = new Map();
