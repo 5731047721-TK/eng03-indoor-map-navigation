@@ -68,22 +68,17 @@ function onStart(){
         navigateNode.set(results.rows[i].id, dataNavigate);
         // console.log(results.rows[i].id, catarr)
     }
-    // console.log(navigateNode)
-    // var pathResult = pathNode.path('f1_56', 'f1_15')
-    // if(pathResult != null){
-    //   var direction = [];
-    //   for(var i =0;i < pathResult.length-1;i++){
-    //     direction[i] = navigateNode.get(pathResult[i]).get(pathResult[i+1]);
-    //   }
-    //   console.log(direction)
-    // }
   })
 }
-
 
 function navigate(req, res, next){
   var fromPath = req.params.from_id
   var toPath = req.params.to_id
+
+  if(navigateNode.get(fromPath) === null || navigateNode.get(toPath) === null){
+    res.json({'Error':'404', 'Detail':'Destination not exist'})
+    next();
+  }
 
   var pathResult = pathNode.path(fromPath, toPath)
   
@@ -93,7 +88,7 @@ function navigate(req, res, next){
       direction.push(navigateNode.get(pathResult[i]).get('Category'));
       direction.push(navigateNode.get(pathResult[i]).get(pathResult[i+1]));
     }
-    console.log(pathResult)
+    // console.log(pathResult)
     var directionText = [];
     var compass = new Map();
     compass.set('North',0);
@@ -152,7 +147,11 @@ function navigate(req, res, next){
       }else {
         var compassnew = compass.get(direction[i]);
         // console.log(compassnew, compassnow, (compassnew - compassnow)%3)
-        if(compassnow === compassnew){
+        // console.log(pathResult[0], i, pathResult[i/2]);
+        if(navigateNode.get(pathResult[Math.floor(i/2)]).get('Description') !== null && (compassnew !== -1 && compassnew !== -2)){
+          directionText.push('Enter ' + navigateNode.get(pathResult[Math.floor(i/2)]).get('Description'));
+          stillStraight = false;
+        }else if(compassnow === compassnew){
           if( !stillStraight) directionText.push('Go straight');
           stillStraight = true;
         }else if(compassnew === -1 || compassnew === -2){
@@ -197,6 +196,13 @@ function navigate(req, res, next){
   next();
 }
 
+function arrayifyMap(m){
+  if(m !== null)
+    return m.constructor === Map ? [...m].map(([v,k]) => [arrayifyMap(v),arrayifyMap(k)]): m;
+  else
+    return null
+}
+
 // Multi-process to utilize all CPU cores.
 if (cluster.isMaster) {
   console.error(`Node cluster master ${process.pid} is running`);
@@ -219,26 +225,14 @@ if (cluster.isMaster) {
   // Priority serve any static files.
   app.use(express.static(path.resolve(__dirname, '../react-ui/build')));
 
+  router.get('/info', (req, res)=>{
+    //console.log(JSON.stringify(Array.from(navigateNode.entries())));
+    //console.log(JSON.parse(arrayifyMap(navigateNode)));
+    res.json(JSON.stringify(arrayifyMap(navigateNode)));
+    //res.json(navigateNode);
+  })
+
   router.get('/:from_id/:to_id', navigate, (req, res) =>{
-    // const results = []
-    // const id = req.params.path_id
-    // const floor = req.params.floor_id
-    // pool.query('SELECT * FROM navigation WHERE id=($1)',[id], (err, result)=>{
-    //   if(err){
-    //     console.log('Its error!!')
-    //     console.log(err);
-    //     pool.end()
-    //     return res.status(500).json({success: false, data: err});
-    //   } else{
-    //     console.log('Query success on floor', floor, 'path', id)
-    //     console.log({results: result.rows})
-    //     results.push(result.rows)
-    //     pool.end()
-    //     return res.json(results)
-    //   }
-    // })
-    // res.json(req.node)
-    // res.end()
   })
 
   app.use('/api',router)
@@ -269,6 +263,8 @@ if (cluster.isMaster) {
 
   // All remaining requests return the React app, so it can handle routing.
   app.get('*', function(request, response) {
+    //response.json(navigateNode);
+    //console.log('Success!');
     response.sendFile(path.resolve(__dirname, '../react-ui/build', 'index.html'));
   });
 
