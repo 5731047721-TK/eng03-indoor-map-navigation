@@ -189,10 +189,7 @@ function navigate(req, res, next){
     res.json({'Error':'404', 'Detail':'Path not found'})
     next();
   }
-  // console.log(fromPath, toPath, testy)
-  
-  
-  res.json(directionText);
+  res.json(directionText.concat('#').concat(pathResult));
   next();
 }
 
@@ -226,8 +223,7 @@ if (cluster.isMaster) {
   app.use(express.static(path.resolve(__dirname, '../react-ui/build')));
 
   router.get('/info', (req, res)=>{
-    //console.log(JSON.stringify(Array.from(navigateNode.entries())));
-    //console.log(JSON.parse(arrayifyMap(navigateNode)));
+    // console.log(JSON.parse(JSON.stringify(arrayifyMap(navigateNode))));
     res.json(JSON.stringify(arrayifyMap(navigateNode)));
     //res.json(navigateNode);
   })
@@ -243,28 +239,8 @@ if (cluster.isMaster) {
   //   res.send('{"message":"Hello from the custom server!"}');
   // });
 
-  // Test db
-  // app.get('/db', function(request, response){
-  //   pool.query('SELECT * FROM node', function(err, result){
-  //     console.log('log message below\n', err, result)
-  //     console.log('Database string below\n', pool.connectionString, process.env.DATABASE_URL)
-  //     if(err){
-  //       console.error(err)
-  //       response.send("Error from query > " + err)
-  //     } else{
-  //       console.log('Query successfully, rendering results')
-  //       console.log({results: result.rows})
-  //       // response.render({results: result.rows})
-  //     }
-  //     pool.end()
-  //   })
-  //   response.end()
-  // });
-
   // All remaining requests return the React app, so it can handle routing.
   app.get('*', function(request, response) {
-    //response.json(navigateNode);
-    //console.log('Success!');
     response.sendFile(path.resolve(__dirname, '../react-ui/build', 'index.html'));
   });
 
