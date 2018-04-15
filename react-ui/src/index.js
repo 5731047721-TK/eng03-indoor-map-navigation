@@ -35,8 +35,7 @@ class App extends React.Component {
                     <HeaderNavigation />
                     
                 </Row>
-                
-                    {m}
+                {m}
                     
                 
 
