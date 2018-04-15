@@ -1,4 +1,7 @@
 import React from 'react';
+import {ReactSVGPanZoom} from 'react-svg-pan-zoom';
+import {PinchView} from 'react-pinch-zoom-pan'
+
 //import ReactDOM from 'react-dom';
 
 export default class FloorOne extends React.Component {
@@ -22,14 +25,14 @@ export default class FloorOne extends React.Component {
     
     render() {
       return (
-      <div className="game">
-              <svg
+        <PinchView debug backgroundColor='#ddd' maxScale={4} containerRatio={30}>
+        <svg 
           xmlns="http://www.w3.org/2000/svg"
           id="map"
           preserveAspectRatio="xMinYMin meet"
           version="1.1"
-          viewBox="0 0 643.80249 182.10458"
-          height="182.10458mm"
+          viewBox="0 0 643.80249 192.25542"
+          height="192.25542mm"
           width="643.80249mm">
           <g  fill = "#f2f2f2"
             transform="translate(240.30879,-67.198951)"
@@ -1090,14 +1093,12 @@ export default class FloorOne extends React.Component {
               <title
                 id="title5247">Amazon Cafe'</title>
             </path>
-
+           
 
 
           </g>
         </svg>
-
-
-      </div>
+        </PinchView>
       );
     }
   }

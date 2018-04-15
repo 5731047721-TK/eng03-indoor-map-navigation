@@ -64,7 +64,7 @@ class HeaderNavigation extends Component {
     render() {
         let nav;
 
-        nav = <Nav pills style={{ position: "relative", left: 650 }}>
+        nav = <Nav >
             <NavItem>
                 <NavLink href="/" >Home</NavLink>
             </NavItem>

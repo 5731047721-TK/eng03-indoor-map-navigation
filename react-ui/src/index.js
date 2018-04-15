@@ -4,7 +4,6 @@ import FloorOne from './b3FloorOne.js';
 import FloorTwo from './b3FloorTwo.js';
 import FloorThree from './b3FloorThree.js';
 import FloorFour from './b3FloorFour.js';
-import {PinchView} from 'react-pinch-zoom-pan'
 import HeaderNavigation from './HeaderNavigation'
 import { Container, Row } from 'reactstrap';
 import './index.css';
@@ -36,10 +35,7 @@ class App extends React.Component {
                     <HeaderNavigation />
                     
                 </Row>
-                <PinchView debug backgroundColor='#ddd' maxScale={8} containerRatio={((250 / 643) * 100)}>
-                   {m}
-                </PinchView>
-                 
+                {m}
                     
                 
 
