@@ -223,9 +223,12 @@ if (cluster.isMaster) {
   app.use(express.static(path.resolve(__dirname, '../react-ui/build')));
 
   router.get('/info', (req, res)=>{
-    // console.log(JSON.parse(JSON.stringify(arrayifyMap(navigateNode))));
-    res.json(JSON.stringify(arrayifyMap(navigateNode)));
-    //res.json(navigateNode);
+    var information = {}
+    for(var [k,v] of navigateNode){
+        if(v.get('Description') !== null) information[k]=v.get('Description');
+    }
+    // res.json(JSON.stringify(arrayifyMap(navigateNode)));
+    res.json(information);
   })
 
   router.get('/:from_id/:to_id', navigate, (req, res) =>{
