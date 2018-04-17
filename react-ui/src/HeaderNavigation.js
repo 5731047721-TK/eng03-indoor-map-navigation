@@ -1,6 +1,6 @@
 // export default HeaderNavigation;
 import React, { Component } from 'react';
-import { Nav, NavItem, NavLink } from 'reactstrap';
+//import { Nav, NavItem, NavLink } from 'reactstrap';
 import { Container, Row, Col } from 'reactstrap';
 import { Form,FormGroup,Label,Input } from 'reactstrap';
 
@@ -17,12 +17,10 @@ class HeaderNavigation extends Component {
             startFloor:'',
             endFloor:'',
             currentFloor:'',
-            info: [],
             data: []
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.onClick = this.onClick.bind(this);
         this.onChange = this.onChange.bind(this);
     }
 
@@ -91,36 +89,18 @@ class HeaderNavigation extends Component {
         console.log(this.state.data);
     }
 
-    onClick(e){
+    /*onClick(e){
         for(var key in this.state.info){
             //console.log(key, this.state.info[key]);
         }
-      }
+      }*/
 
     render() {
-        let nav;
 
-        nav = <Nav >
-            <NavItem>
-                <NavLink onClick={this.onClick}>Home</NavLink>
-            </NavItem>
-            <NavItem>
-                <NavLink href="/floor1">floor1</NavLink>
-            </NavItem>
-            <NavItem>
-                <NavLink href="/floor2">floor2</NavLink>
-            </NavItem>
-            <NavItem>
-                <NavLink href="/floor3">floor3</NavLink>
-            </NavItem>
-            <NavItem>
-                <NavLink href="/floor4">floor4</NavLink>
-            </NavItem>
-        </Nav>
 
         let sRoom = null;
         let eRoom = null;
-        if(this.state.startFloor == 'floor1'){
+        if(this.state.startFloor === 'floor1'){
             sRoom = 
             <Input type="select" name="select place" id="startPoint" value={this.props.sPoint} onChange={this.handleChange}>
                 <option>b1_1</option>
@@ -128,7 +108,7 @@ class HeaderNavigation extends Component {
                 <option>b1_3</option>
                 <option>b1_4</option>
             </Input>
-        }else if(this.state.startFloor == 'floor2'){
+        }else if(this.state.startFloor === 'floor2'){
             sRoom = 
             <Input type="select" name="select place" id="startPoint" value={this.props.sPoint} onChange={this.handleChange}>
                 <option>b2_01</option>
@@ -136,7 +116,7 @@ class HeaderNavigation extends Component {
                 <option>b2_03</option>
                 <option>b2_04</option>
             </Input>
-        }else if(this.state.startFloor == 'floor3'){
+        }else if(this.state.startFloor === 'floor3'){
             sRoom = 
             <Input type="select" name="select place" id="startPoint" value={this.props.sPoint} onChange={this.handleChange}>
                 <option>b3_01</option>
@@ -144,7 +124,7 @@ class HeaderNavigation extends Component {
                 <option>b3_03</option>
                 <option>b3_04</option>
             </Input>
-        }else if(this.state.startFloor == 'floor4'){
+        }else if(this.state.startFloor === 'floor4'){
             sRoom = 
             <Input type="select" name="select place" id="startPoint" value={this.props.sPoint} onChange={this.handleChange}>
                 <option>b4_01</option>
@@ -155,7 +135,7 @@ class HeaderNavigation extends Component {
         }
 
 
-        if(this.state.endFloor == 'floor1'){
+        if(this.state.endFloor === 'floor1'){
             eRoom = 
             <Input type="select" name="select place" id="endPoint" value={this.props.ePoint} onChange={this.handleChange}>
                 <option>b1_1</option>
@@ -163,7 +143,7 @@ class HeaderNavigation extends Component {
                 <option>b1_3</option>
                 <option>b1_4</option>
             </Input>
-        }else if(this.state.endFloor == 'floor2'){
+        }else if(this.state.endFloor === 'floor2'){
             eRoom = 
             <Input type="select" name="select place" id="endPoint" value={this.props.ePoint} onChange={this.onChange}>
                 <option id = 'b2_01'>Stair1</option>
@@ -171,7 +151,7 @@ class HeaderNavigation extends Component {
                 <option id = 'b2_03'>b2_3</option>
                 <option id = 'b2_04'>b2_4</option>
             </Input>
-        }else if(this.state.endFloor == 'floor3'){
+        }else if(this.state.endFloor === 'floor3'){
             eRoom = 
             <Input type="select" name="select place" id="endPoint" value={this.props.ePoint} onChange={this.handleChange}>
                 <option>b3_1</option>
@@ -179,7 +159,7 @@ class HeaderNavigation extends Component {
                 <option>b3_3</option>
                 <option>b3_4</option>
             </Input>
-        }else if(this.state.endFloor == 'floor4'){
+        }else if(this.state.endFloor === 'floor4'){
             eRoom = 
             <Input type="select" name="select place" id="endPoint" value={this.props.ePoint} onChange={this.handleChange}>
                 <option>b4_1</option>
@@ -203,10 +183,7 @@ class HeaderNavigation extends Component {
                 {
                     !this.state.isNavigate && this.state.data !== [] ?
                     <Container>
-                    <Row>
-                    <Col sm="1"><img src={process.env.PUBLIC_URL + '/favicon.ico'} height="42" width="40" /></Col>
-                    <Col >{nav}</Col>
-                    </Row>
+                    
                     <Row>
                         <Col sm="8"><h1> Eng03-indoor-map </h1></Col>
                     </Row>
