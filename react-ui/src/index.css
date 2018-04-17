@@ -72,35 +72,6 @@ path{
 
 }
 
-@media screen and (min-width: 400px) {
-  body {
-      background-color: lightgreen;
-  }
-}
-
-@media screen and (min-width: 800px) {
-  body {
-      background-color: lavender;
-  }
-}
-
-@media all and (min-width: 1000px) {
-  body{
-    background-color: royalblue;
-  }
-  .container article{
-      -moz-column-count: 2; /* Firefox */
-      -webkit-column-count: 2; /* Safari, Chrome */ 
-      column-count: 2; 
-      -moz-column-gap: 1em; /* Firefox */ 
-      -webkit-column-gap: 1em; /* Safari, Chrome */
-      column-gap: 1em;
-      -moz-column-rule: 1px solid #888; /* Firefox */
-      -webkit-column-rule: 1px solid #888; /* Safari, Chrome */
-      column-rule: 1px solid #888;
-      
-  }
-}
 
 
 

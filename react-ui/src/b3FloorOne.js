@@ -1,5 +1,4 @@
 import React from 'react';
-import {ReactSVGPanZoom} from 'react-svg-pan-zoom';
 import {PinchView} from 'react-pinch-zoom-pan'
 
 //import ReactDOM from 'react-dom';
@@ -8,24 +7,43 @@ export default class FloorOne extends React.Component {
     constructor(props) {
       super(props);
       this.onClick = this.onClick.bind(this);
+      this.handleChange = this.handleChange.bind(this);
       this.state = {
-        startPoint : "",
+        startPoint: '',
+        endPoint: '',
         Color : ""
       };
     }
+
+    handleChange(event) {
+      this.setState({[event.target.id]: event.target.value});
+  }
   
-    onClick(e){
+    /*onClick(e){
       if(e){
         
         //if(e.target.id === 'path25') this.setState( {Color:"	#FFA07A",})
-        alert(e.target.id);
-        // console.log(this.State.Color)
+        if(this.state.startPoint == '')this.setState({startPoint: e.target.id});
+        else this.setState({endPoint: e.target.id});
+        alert(this.state.startPoint);
+        console.log('sP'+this.state.startPoint)
+        console.log('eP'+this.state.endPoint)
       }
-    }
+    }*/
+
+    onClick = (e) => {
+      //console.log(e.target.id);
+      this.props.callbackSelectPoint(e.target.id);
+      
+      
+      
+    };
     
     render() {
       return (
-        <PinchView debug backgroundColor='#ddd' maxScale={4} containerRatio={30}>
+
+        
+        <PinchView debug backgroundColor='#ddd' maxScale={4} containerRatio={40}>
         <svg 
           xmlns="http://www.w3.org/2000/svg"
           id="map"
