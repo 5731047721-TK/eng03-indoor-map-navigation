@@ -20,7 +20,7 @@ const pathNode = new Graph()
 const navigateNode = new Map()
 
 function onStart(){
-  var sql = 'SELECT * FROM route LEFT JOIN object ON location = id'
+  var sql = 'SELECT * FROM route LEFT JOIN object ON location = id ORDER BY id'
   pool.query(sql, function(err, results){
     if(err){
       console.error(err);
@@ -71,6 +71,39 @@ function onStart(){
   })
 }
 
+function facingDirection(facing, newFacing){
+  var compass = new Map();
+  compass.set('North',0);
+  compass.set('East',1);
+  compass.set('South',2);
+  compass.set('West',3);
+  compass.set('N', 0);
+  compass.set('E', 1);
+  compass.set('W', 3);
+  compass.set('S', 2);
+  compass.set('Up', -1);
+  compass.set('Down', -2);
+  // compass.set(0,'North');
+  // compass.set(1,'East');
+  // compass.set(2,'South');
+  // compass.set(3,'West');
+  var compassnew = compass.get(newFacing);
+  
+  var compassnow = facing;
+  if(compassnew === -1 || compassnew === -2){
+    return compass.get((compassnow+2)%4);
+  }
+  if((compassnew - compassnow)%4 > 0){
+    return 'right';
+  }else if((compassnew - compassnow)%4 < 0){
+    return 'left';
+  }else if(compassnew === compassnow){
+    return 'front';
+  }else{
+    console.log('wut',compassnew,newFacing,compassnow, facing)
+  }
+}
+
 function navigate(req, res, next){
   var fromPath = req.params.from_id
   var toPath = req.params.to_id
@@ -103,6 +136,7 @@ function navigate(req, res, next){
     compass.set('Down', -2);
     var compassnow = 0
     var stillStraight = false;
+    var gotCompass = false;
     for(var i = 0; i < direction.length; i++){
       if(i%2===0){
         if(direction[i].length > 0){
@@ -110,16 +144,16 @@ function navigate(req, res, next){
             stillStraight = false;
             var texttemp = 'You can see ';
             for(var j=0;j<direction[i].length;j++){
-                if(j !== direction[i].length-1){
+              if(j !== direction[i].length-1){
                   if(i===0){
                     texttemp += direction[i][j][0] + ' on the ' + compass.get(direction[i][j][1]) + ', ';
                   } else {
-                    var compassnew = compass.get(direction[i][j][1]);
-                    if(compassnow === compassnew){
+                    var facing = facingDirection(compassnow, direction[i][j][1]);
+                    if(facing === 'front'){
                       texttemp += direction[i][j][0] + ' in front of you, '
-                    }else if((compassnew - compassnow)%3 > 0){
+                    }else if(facing === 'right'){
                       texttemp += direction[i][j][0] + ' on your right, '
-                    }else{
+                    }else if(facing === 'left'){
                       texttemp += direction[i][j][0] + ' on your left, '
                     }
                   }
@@ -127,12 +161,12 @@ function navigate(req, res, next){
                   if(i===0){
                     texttemp += direction[i][j][0] + ' on the ' + compass.get(direction[i][j][1]);
                   } else {
-                    var compassnew = compass.get(direction[i][j][1]);
-                    if(compassnow === compassnew){
+                    var facing = facingDirection(compassnow, direction[i][j][1]);
+                    if(facing === 'front'){
                       texttemp += direction[i][j][0] + ' in front of you'
-                    }else if((compassnew - compassnow)%3 > 0){
+                    }else if(facing === 'right'){
                       texttemp += direction[i][j][0] + ' on your right'
-                    }else{
+                    }else if(facing === 'left'){
                       texttemp += direction[i][j][0] + ' on your left'
                     }
                   }
@@ -141,49 +175,67 @@ function navigate(req, res, next){
             directionText.push(texttemp);
         }
       }
-      else if(i===1){
-        directionText.push('Face ' + direction[i]);
+      else if(gotCompass === false){
         compassnow = compass.get(direction[i]);
+        if(compassnow === -1 || compassnow === -2){
+          directionText.push('Go ' + direction[i]);
+        }else{
+          gotCompass = true;
+          directionText.push('Face ' + direction[i]);
+        }
       }else {
         var compassnew = compass.get(direction[i]);
-        // console.log(compassnew, compassnow, (compassnew - compassnow)%3)
-        // console.log(pathResult[0], i, pathResult[i/2]);
+        var facing = facingDirection(compassnow, direction[i]);
         if(navigateNode.get(pathResult[Math.floor(i/2)]).get('Description') !== null && (compassnew !== -1 && compassnew !== -2)){
           directionText.push('Enter ' + navigateNode.get(pathResult[Math.floor(i/2)]).get('Description'));
           stillStraight = false;
-        }else if(compassnow === compassnew){
+        }else if(facing === 'front'){
           if( !stillStraight) directionText.push('Go straight');
           stillStraight = true;
         }else if(compassnew === -1 || compassnew === -2){
-          compassnow = (compassnow+2)%3
+          compassnow = facing
           directionText.push('Go ' + direction[i] + ' the stair');
           stillStraight = false;
-        }else if((compassnew - compassnow)%3 > 0){
-          // console.log('right!',compassnew, compassnow)
-          compassnow = compass.get(direction[i]);
+        }else if(facing === 'right'){
+          if(stillStraight===true){
+            for(var [k,v] of navigateNode.get(pathResult[Math.floor(i/2)])){
+              if(k.indexOf('b')===0) {
+                directionText.push('You should see ' + navigateNode.get(k).get('Description') + ' on the ' + facingDirection(compassnow, v));
+              }  
+            }
+          }
+          compassnow = compassnew;
           directionText.push('Turn right');
           stillStraight = false;
-        }else if((compassnew - compassnow)%3 < 0){
-          // console.log('left!',compassnew, compassnow)
-          compassnow = compass.get(direction[i]);
+        }else if(facing === 'left'){
+          if(stillStraight===true){
+            for(var [k,v] of navigateNode.get(pathResult[Math.floor(i/2)])){
+              if(k.indexOf('b')===0) {
+                directionText.push('You should see ' + navigateNode.get(k).get('Description') + ' on the ' + facingDirection(compassnow, v));
+              }  
+            }
+          }
+          compassnow = compassnew;
           directionText.push('Turn left');
           stillStraight = false;
         }
-        if(i===direction.length-1){
-          var lasttext = directionText.pop();
-          if(lasttext==='Go straight'){
-            directionText.push('Your place is in front of you');
-          }else if(lasttext==='Turn right'){
-            directionText.push('Your place is on the right');
-          }else if(lasttext==='Turn left'){
-            directionText.push('Your place is on the left');
-          }else{
-            console.log(lasttext);
-          }
-          // directionText.push('Your place is on') 
-        }
-        //console.log(direction)
       }
+      if(i===direction.length-1){
+        var lasttext = directionText.pop();
+        if(lasttext==='Go straight'){
+          directionText.push('Go straight');
+          directionText.push('Your place is in front of you');
+        }else if(lasttext==='Turn right'){
+          directionText.push('Your place is on the right');
+        }else if(lasttext==='Turn left'){
+          directionText.push('Your place is on the left');
+        }else{
+          directionText.push(lasttext + ' and you should see your place');
+          // console.log(lasttext);
+        }
+        // directionText.push('Your place is on') 
+      }
+      //console.log(direction)
     }
   }else{
     res.json({'Error':'404', 'Detail':'Path not found'})
