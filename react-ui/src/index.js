@@ -5,7 +5,7 @@ import FloorTwo from './b3FloorTwo.js';
 import FloorThree from './b3FloorThree.js';
 import FloorFour from './b3FloorFour.js';
 import HeaderNavigation from './HeaderNavigation'
-import { Container, Row,Col,Nav,NavItem,NavLink, Button } from 'reactstrap';
+import { Container,Label,Input,InputGroup,InputGroupAddon, ButtonGroup,Row,Col,Nav,NavItem,NavLink, Button } from 'reactstrap';
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.css';
 
@@ -21,11 +21,13 @@ class App extends React.Component {
             endPoint: '',
             currentFloor: '',
             info: [],
-            isNavi: false
+            data: [],
+            isNavigate: false
         };
 
         this.onClick = this.onClick.bind(this);
         this.handleChangeFloor = this.handleChangeFloor.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     handleChangeFloor(event){ 
@@ -85,6 +87,27 @@ class App extends React.Component {
         this.setState({[e.target.id]: this.state.selectPoint});
     }
 
+    handleSubmit(event) {
+        event.preventDefault();
+
+
+        var pathsid = this.state.startPoint
+        var patheid = this.state.endPoint
+        //location.href = '/api/1/' + pathid
+        //window.location = '/api/' + pathsid +'/'+patheid
+        var path = 'api/' + pathsid +'/'+patheid
+        fetch(path)
+        .then((Response) => Response.json())
+        .then((res) => {
+          console.log(res)
+          this.setState({
+            data: res,
+            isNavigate: true
+          })
+        })
+        console.log(this.state.data);
+    }
+
     
     
   render() {
@@ -93,15 +116,17 @@ class App extends React.Component {
       let nav;
 
       nav = <Col >
-          <Button size="sm" id = 'floor1' onClick = {this.handleChangeFloor} color="info">floor1</Button>{' '}
-          <Button size="sm" id = 'floor2' onClick = {this.handleChangeFloor} color="info">floor2</Button>{' '}
-          <Button size="sm" id = 'floor3' onClick = {this.handleChangeFloor} color="info">floor3</Button>{' '}
-          <Button size="sm" id = 'floor4' onClick = {this.handleChangeFloor} color="info">floor4</Button>{' '}
+         <ButtonGroup>
+          <Button size="sm" id = 'floor1' onClick = {this.handleChangeFloor} color="info">floor1</Button>
+          <Button size="sm" id = 'floor2' onClick = {this.handleChangeFloor} color="info">floor2</Button>
+          <Button size="sm" id = 'floor3' onClick = {this.handleChangeFloor} color="info">floor3</Button>
+          <Button size="sm" id = 'floor4' onClick = {this.handleChangeFloor} color="info">floor4</Button>
+          </ButtonGroup>
       </Col>
 
-      if(this.state.currentFloor === 'floor2') m = <FloorTwo />
-      else if(this.state.currentFloor === 'floor3') m = <FloorThree />
-      else if(this.state.currentFloor === 'floor4') m = <FloorFour />
+      if(this.state.currentFloor === 'floor2') m = <FloorTwo sPoint = {this.state.startPoint}  callbackSelectPoint={this.myCallbackSelectPoint}/>
+      else if(this.state.currentFloor === 'floor3') m = <FloorThree sPoint = {this.state.startPoint}  callbackSelectPoint={this.myCallbackSelectPoint}/>
+      else if(this.state.currentFloor === 'floor4') m = <FloorFour sPoint = {this.state.startPoint}  callbackSelectPoint={this.myCallbackSelectPoint}/>
       else m = <FloorOne sPoint = {this.state.startPoint}  callbackSelectPoint={this.myCallbackSelectPoint}/>
       const {isLoading , info} = this.state;
       return (
@@ -109,6 +134,15 @@ class App extends React.Component {
                 <Row>
                     <Col sm="1"><img src={process.env.PUBLIC_URL + '/favicon.ico'} height="42" width="40" /></Col>
                     {nav}
+                    <Col sm="6">
+                        <InputGroup>     
+                            <Input sm="4" id="startPoint"  ref="EndInput" placeholder='Start Point' value= {this.state.info[this.state.startPoint]}  />
+                            <Input sm="4" id="endPoint"  ref="EndInput" placeholder='End Point' value={this.state.info[this.state.endPoint]}  />
+                            <InputGroupAddon addonType="append">
+                                <Button color="success" onClick={this.handleSubmit.bind(this)}>Submit</Button>
+                            </InputGroupAddon> 
+                        </InputGroup>    
+                    </Col>
                 </Row>
                 {
                     !isLoading  && this.state.selectPoint !== '' ? <h3>{info[this.state.selectPoint]+' '} 
@@ -119,7 +153,9 @@ class App extends React.Component {
                  }
                  {m}
                 <Row>
-                    <HeaderNavigation info = {this.state.info} sPoint = {this.state.startPoint} ePoint = {this.state.endPoint} callbackStartPoint={this.myCallbackStartPoint} callbackEndPoint={this.myCallbackEndPoint}/>
+                    <HeaderNavigation data = {this.state.data} info = {this.state.info} isNavigate = {this.state.isNavigate}
+                    sPoint = {this.state.startPoint} ePoint = {this.state.endPoint} 
+                    callbackStartPoint={this.myCallbackStartPoint} callbackEndPoint={this.myCallbackEndPoint}/>
                     
                 </Row>
             

@@ -11,25 +11,13 @@ export default class FloorOne extends React.Component {
       this.state = {
         startPoint: '',
         endPoint: '',
-        Color : ""
+        Color :''
       };
     }
 
     handleChange(event) {
       this.setState({[event.target.id]: event.target.value});
   }
-  
-    /*onClick(e){
-      if(e){
-        
-        //if(e.target.id === 'path25') this.setState( {Color:"	#FFA07A",})
-        if(this.state.startPoint == '')this.setState({startPoint: e.target.id});
-        else this.setState({endPoint: e.target.id});
-        alert(this.state.startPoint);
-        console.log('sP'+this.state.startPoint)
-        console.log('eP'+this.state.endPoint)
-      }
-    }*/
 
     onClick = (e) => {
       //console.log(e.target.id);

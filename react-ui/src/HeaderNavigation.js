@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 //import { Nav, NavItem, NavLink } from 'reactstrap';
 import { Container, Row, Col } from 'reactstrap';
-import { Form,FormGroup,Label,Input } from 'reactstrap';
+import { Form,FormGroup,Label,Input,ListGroup,ListGroupItem,ListGroupItemHeading } from 'reactstrap';
 
 
 
@@ -13,14 +13,12 @@ class HeaderNavigation extends Component {
         super(props);
         this.state = {
             isLoading: true,
-            isNavigate: false,
             startFloor:'',
             endFloor:'',
             currentFloor:'',
-            data: []
+            
         }
         this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
         this.onChange = this.onChange.bind(this);
     }
 
@@ -68,26 +66,7 @@ class HeaderNavigation extends Component {
       }
 
 
-    handleSubmit(event) {
-        event.preventDefault();
 
-
-        var pathsid = this.props.sPoint
-        var patheid = this.props.ePoint
-        //location.href = '/api/1/' + pathid
-        //window.location = '/api/' + pathsid +'/'+patheid
-        var path = 'api/' + pathsid +'/'+patheid
-        fetch(path)
-        .then((Response) => Response.json())
-        .then((res) => {
-          console.log(res)
-          this.setState({
-            data: res,
-            isNavigate: true
-          })
-        })
-        console.log(this.state.data);
-    }
 
     /*onClick(e){
         for(var key in this.state.info){
@@ -169,19 +148,16 @@ class HeaderNavigation extends Component {
             </Input>
         }
         
-        /*
-          {
-                                !isLoading && info.length > 0 ? info.map(info =>{
-                                    return <li key = {info.id}>{info.id}</li>
-                                }) : null                
-            }
-        */
 
+        const listInfo = this.props.data.map((info) =>
+        <ListGroupItem>{info}</ListGroupItem>
+          );
+        
        
         return (
             <Container>
                 {
-                    !this.state.isNavigate && this.state.data !== [] ?
+                    !this.props.isNavigate && this.props.data !== [] ?
                     <Container>
                     
                     <Row>
@@ -189,7 +165,7 @@ class HeaderNavigation extends Component {
                     </Row>
                     <Row>
                         <Col sm="4">
-                        <Form onSubmit={this.handleSubmit.bind(this)}>
+                        <Form>
                         <FormGroup>
                             <Label id = 'startPoint'  onChange={this.propsChange} for="exampleSelect">Start Point: Please select floor and room {this.props.sPoint}</Label>
                             <Input type="select" name="select floor" placeholder='select floor' id="startFloor" value={this.state.startFloor} onChange={this.handleChange}>
@@ -209,14 +185,6 @@ class HeaderNavigation extends Component {
                             {eRoom}
                         
                         </FormGroup>
-                            <Label  text='Start :' size='3'>     
-                                <Input id="startPoint"  ref="EndInput" placeholder='Start Point' value= {this.props.sPoint} onChange={this.handleChange} size='10' />
-                            </Label>
-                            <Label  text='End  :' size='3'> 
-                                
-                                <Input id="endPoint"  ref="EndInput" placeholder='End Point' value={this.props.ePoint} onChange={this.handleChange} size='10' />
-                            </Label>
-                            <Input type="submit" value="Submit" />
                             </Form>
                         </Col>
                     </Row>
@@ -226,7 +194,13 @@ class HeaderNavigation extends Component {
                     <hr />
                     </Container>
                     
-                 : <p>{this.state.data}}</p>
+                 :  <ListGroup>
+                     <ListGroupItem color="success"> 
+                     <ListGroupItemHeading>Starting Navigation</ListGroupItemHeading>
+                    From :{this.props.info[this.props.sPoint]} to :{this.props.info[this.props.ePoint]}
+                     </ListGroupItem>
+                        {listInfo} 
+                    </ListGroup>
                 }
              </Container>
         );

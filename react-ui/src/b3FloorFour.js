@@ -1,28 +1,30 @@
 import React from 'react';
-//import ReactDOM from 'react-dom';
+import {PinchView} from 'react-pinch-zoom-pan'
 
 export default class FloorFour extends React.Component {
     constructor(props) {
       super(props);
       this.onClick = this.onClick.bind(this);
+      this.handleChange = this.handleChange.bind(this);
       this.state = {
-        startPoint : "",
-        Color : ""
+        startPoint: '',
+        endPoint: '',
+        Color :''
       };
     }
-  
-    onClick(e){
-      if(e){
-        
-        if(e.target.id === 'path25') this.setState( {Color:"	#FFA07A",})
-        alert(e.target.id);
-        // console.log(this.State.Color)
-      }
-    }
+
+    handleChange(event) {
+      this.setState({[event.target.id]: event.target.value});
+  }
+
+    onClick = (e) => {
+      //console.log(e.target.id);
+      this.props.callbackSelectPoint(e.target.id);
+    };
     
     render() {
       return (
-      <div className="game">
+        <PinchView debug backgroundColor='#ddd' maxScale={4} containerRatio={40}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           id="map"
@@ -37,107 +39,135 @@ export default class FloorFour extends React.Component {
             <path fill = "#ff6600"
               id="path828"
               d="m -180.29465,225.94049 h 37.04167 V 194.1905 h 126.999993 v 47.62499 h -15.875 v 5.29167 h 15.875 v 37.04167 H 164.9866 v -35.71875 h 6.61458 v -21.16667 h -6.61458 v -2.64583 h 11.90625 V 212.71133 H 164.9866 v -19.84375 h 111.125 v 22.48958 h 27.78125 v -55.5625 H 164.9866 v -9.26041 h -34.39584 v 76.72916 H 15.497013 v -75.40625 h -34.395834 v 7.9375 H -180.29465 Z"/>
-            <path
-              id="path845"
-              d="m -178.70716,160.5884 v 22.48958 h 29.10417 V 160.5884 Z" />
-            <path
-              id="path847"
-              d="m -178.17799,202.12797 v 22.48958 h 32.80834 v -22.48958 z" />
-            <path
-              id="path851"
-              d="m -177.9134,191.54465 v 9.26042 h 10.58334 v -2.64583 h 10.58333 v -6.61459 z"/>
-            <path
-              id="path853"
-              d="m -147.75091,160.5884 v 22.48958 h 19.84375 V 160.5884 Z"/>
-            <path
-              id="path855"
-              d="m -126.05507,160.5884 v 22.48958 h 30.427082 V 160.5884 Z" />
-            <path
-              id="path857"
-              d="m -94.305071,160.5884 v 22.48958 h 30.427083 V 160.5884 Z"/>
-            <path
-              id="path859"
-              d="m -62.555072,160.5884 v 22.48958 h 30.427083 V 160.5884 Z" />
-            <path
-              id="path861"
-              d="m -18.105071,152.91549 v 21.16667 h 32.279169 v -21.16667 z"/>
-            <path
-              id="path863"
-              d="m -30.805072,160.5884 v 11.90625 h 9.260416 V 160.5884 Z" />
-            <path
-              id="path865"
-              d="m -11.225905,174.87591 v 22.48958 h 25.135416 v -22.48958 z"/>
-            <path
-              id="path867"
-              d="M -11.225905,198.15924 V 227.2634 H 13.909511 V 198.15924 Z" />
-            <path
-              id="path869"
-              d="m -31.59882,242.60925 v 3.96875 h 5.291667 v -3.96875 z"/>
-            <path
-              id="path877"
-              d="m 7.0303443,237.05297 v 7.9375 H 18.936597 v 38.36458 h 62.177082 v -14.55208 h 10.583334 v 14.55208 h 52.916697 v -10.58333 h -10.58334 v -26.45833 h 10.58334 V 235.73005 H 134.03037 V 231.7613 H 12.322012 v 5.29167 z" />
-            <path
-              id="path879"
-              d="m -8.0509042,236.78839 v 9.26042 H 5.1782609 v -9.26042 H 1.2095108 v 6.61459 h -5.2916664 v -6.61459 z" />
-            <path
-              id="path881"
-              d="m 144.61371,246.31339 h -10.58334 v 26.45833 h 10.58334 v -6.61458 h -5.29167 v -14.55209 h 5.29167 v -5.29166" />
-            <path
-              id="path883"
-              d="m 81.378263,276.47589 v 6.87916 H 91.432429 V 269.8613 h -4.7625 v 9.525 h -0.79375 v -4.7625 z" />
-            <path
-              id="path885"
-              d="m 152.55119,246.578 v 12.69999 h 11.90625 V 246.578 Z"/>
-            <path
-              id="path887"
-              d="m 152.55119,260.33632 v 12.17082 h 11.90625 v -12.17082 z" />
-            <path
-              id="path889"
-              d="m 152.55119,273.30089 v 10.58333 h 11.90625 v -10.58333 z"/>
-            <path
-              id="path891"
-              d="m 131.91369,181.75507 -1e-5,45.50833 h 25.13542 l 1e-5,-45.50833 z" />
-            <path
-              id="path893"
-              d="m 131.91369,151.32798 v 29.10417 h 15.875 v -29.10417 z" />
-            <path
-              id="path895"
-              d="m 149.37617,151.32798 v 24.34167 h 14.5521 v -24.34167 z" />
-            <path
-              id="path897"
-              d="m 165.78036,160.5884 v 23.8125 h 19.84375 v -23.8125 z" />
-            <path
-              id="path899"
-              d="m 186.94702,160.5884 v 23.8125 h 19.84375 v -23.8125 z" />
-            <path
-              id="path901"
-              d="m 208.11369,160.5884 v 23.8125 h 30.42708 v -23.8125 z"/>
-            <path
-              id="path903"
-              d="m 239.86369,160.5884 v 23.8125 h 19.84375 v -23.8125 z"/>
-            <path
-              id="path905"
-              d="m 261.03035,160.5884 v 9.26042 h 3.96875 v -5.29167 h 6.61459 v 5.29167 h 3.96875 v -9.26042 z" />
-            <path
-              id="path907"
-              d="m 277.43452,161.11757 v 21.16667 h 25.13542 v -21.16667 z"/>
-            <path
-              id="path909"
-              d="m 277.43452,183.60715 v 30.42709 h 25.13542 v -30.42709 z"/>
-            <path
-              id="path911"
-              d="m 171.60119,214.03424 v 3.96874 h 3.96875 v -3.96874 z"/>
-            <path
-              id="path913"
-              d="m 171.60119,219.59048 v 3.96875 h 3.96875 v -3.96875 z"/>
-            <path
-              id="path894"
-              d="M -14.930072,247.10715 H 18.142844 V 282.8259 H -14.930072 Z" />
-        </g>
+            <path onClick = {this.onClick} 
+              id="b4_422"
+              d="m -180.29465,159.79465 v 23.28333 h 33.07291 v -23.28333 z"
+               />
+            <path onClick = {this.onClick} 
+              id="b4_424"
+              d="m -180.29465,202.12797 v 23.81251 h 37.04166 v -23.81251 z"
+               />
+            <path onClick = {this.onClick} 
+              id="b4_423"
+              d="m -180.29465,191.54465 v 10.58333 h 11.90625 v -3.0238 h 11.90625 v -7.55953 z"
+               />
+            <path onClick = {this.onClick} 
+              id="b4_421"
+              d="m -147.22174,159.79465 v 23.28333 h 19.84375 v -23.28333 z"
+              />
+            <path onClick = {this.onClick} 
+              id="b4_420"
+              d="m -127.37799,159.79465 v 23.28333 h 31.750002 v -23.28333 z"
+               />
+            <path onClick = {this.onClick} 
+              id="b4_419"
+              d="m -95.627986,159.79465 v 23.28333 h 31.749998 v -23.28333 z"
+               />
+            <path onClick = {this.onClick} 
+              id="b4_418"
+              d="m -63.877986,159.79465 v 23.28333 h 35.71875 v -23.28333 z"
+               />
+            <path onClick = {this.onClick} 
+              id="b4_417"
+              d="m -18.898819,151.85715 v 23.8125 h 34.395833 v -23.8125 z"
+               />
+            <path onClick = {this.onClick} 
+              id="b4_02"
+              d="m -28.159235,159.79465 v 12.7 h 9.260416 v -12.7 z"
+               />
+            <path onClick = {this.onClick} 
+              id="b4_416"
+              d="m -11.225905,175.66965 v 22.48958 h 26.722919 v -22.48958 z"
+               />
+            <path onClick = {this.onClick} 
+              id="b4_415"
+              d="M -11.225905,198.15924 V 227.2634 H 15.497014 V 198.15924 Z"
+               />
+            <path onClick = {this.onClick} 
+              id="b4_03"
+              d="m -31.59882,242.60925 v 3.96875 h 5.291667 v -3.96875 z"
+               />
+            <path onClick = {this.onClick} 
+              id="b4_04"
+              d="m -10.318756,236.52381 v 11.00667 H 5.1782609 V 236.52381 H 0.52915503 v 7.86191 H -5.6696523 v -7.86191 z"
+               />
+            <path onClick = {this.onClick} 
+              id="b4_06"
+              d="m 144.61371,246.31339 h -12.17089 v 28.57501 h 12.17089 v -7.14375 h -6.08545 v -15.71626 h 6.08545 v -5.715"
+              />
+            <path onClick = {this.onClick} 
+              id="b4_05"
+              d="m 80.319931,276.49795 v 7.45243 h 11.112498 v -14.61825 h -5.263815 v 10.31876 h -0.877303 v -5.15938 z"
+              />
+            <path onClick = {this.onClick} 
+              id="b4_410"
+              d="m 152.55119,248.43006 v 11.90625 h 12.43541 v -11.90625 z"
+               />
+            <path onClick = {this.onClick} 
+              id="b4_411"
+              d="m 152.55119,260.33632 v 12.17082 h 12.43541 v -12.17082 z"
+               />
+            <path onClick = {this.onClick} 
+              id="b4_412"
+              d="m 152.55119,272.24256 v 11.90625 h 12.43541 v -11.90625 z"
+              />
+            <path onClick = {this.onClick} 
+              id="b4_409"
+              d="m 130.59077,182.28423 -1e-5,44.97917 h 26.45834 l 1e-5,-44.97917 z"
+               />
+            <path onClick = {this.onClick} 
+              id="b4_408"
+              d="m 130.59076,150.53423 v 31.75 h 17.19793 v -31.75 z"
+               />
+            <path onClick = {this.onClick} 
+              id="b4_407"
+              d="m 147.78868,150.53423 v 25.13542 h 17.19792 v -25.13542 z"
+              />
+            <path onClick = {this.onClick} 
+              id="b4_406"
+              d="m 164.9866,159.79465 v 24.60625 h 21.16666 v -24.60625 z"
+              />
+            <path onClick = {this.onClick} 
+              id="b4_405"
+              d="m 186.15326,159.79465 v 24.60625 h 21.16667 v -24.60625 z"
+              />
+            <path onClick = {this.onClick} 
+              id="b4_404"
+              d="m 207.31993,159.79465 v 24.60625 h 31.75 v -24.60625 z"
+              />
+            <path onClick = {this.onClick} 
+              id="b4_403"
+              d="m 239.06993,159.79465 v 24.60625 h 22.48958 v -24.60625 z"
+              />
+            <path onClick = {this.onClick} 
+              id="b4_08"
+              d="m 261.55951,159.79465 v 9.26042 h 3.96875 v -5.29167 h 6.61459 v 5.29167 h 3.96875 v -9.26042 z"
+              />
+            <path onClick = {this.onClick} 
+              id="b4_402"
+              d="m 276.1116,159.79465 v 22.48959 h 27.78125 v -22.48959 z"
+              />
+            <path onClick = {this.onClick} 
+              id="b4_401"
+              d="m 276.11439,182.28702 v 33.01396 h 27.77567 v -33.01396 z"
+               />
+            <path onClick = {this.onClick} 
+              id="b4_07"
+              d="m 171.60119,214.03423 v 9.525 h 3.96875 v -9.525 z"
+              />
+            <path onClick = {this.onClick} 
+              id="b4_314"
+              d="m 5.102668,236.52381 v 10.88572 h -21.355654 v 36.73928 h 96.100443 v -14.96786 h 12.012561 v 14.96786 H 133.2366 v -46.26428 -1.36072 z"
+              />
+            <path onClick = {this.onClick} 
+              id="b4_01"
+              d="m -180.29465,183.07798 v 8.46667 h 18.78541 v -8.46667 z"
+              />
+          </g>
       </svg>
 
 
-      </div>
+      </PinchView>
       );
     }
   }
