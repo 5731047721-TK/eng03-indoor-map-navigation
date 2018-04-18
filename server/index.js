@@ -135,13 +135,13 @@ function navigate(req, res, next){
     compass.set('Up', -1);
     compass.set('Down', -2);
     var compassnow = 0
-    var stillStraight = false;
+    var stillStraight = 0;
     var gotCompass = false;
     for(var i = 0; i < direction.length; i++){
       if(i%2===0){
         if(direction[i].length > 0){
             // console.log('Saw object', direction[i])
-            stillStraight = false;
+            stillStraight = 0;
             var texttemp = 'You can see ';
             for(var j=0;j<direction[i].length;j++){
               if(j !== direction[i].length-1){
@@ -188,16 +188,25 @@ function navigate(req, res, next){
         var facing = facingDirection(compassnow, direction[i]);
         if(navigateNode.get(pathResult[Math.floor(i/2)]).get('Description') !== null && (compassnew !== -1 && compassnew !== -2)){
           directionText.push('Enter ' + navigateNode.get(pathResult[Math.floor(i/2)]).get('Description'));
-          stillStraight = false;
+          stillStraight = 0;
         }else if(facing === 'front'){
-          if( !stillStraight) directionText.push('Go straight');
-          stillStraight = true;
+          if(stillStraight===0){
+            directionText.push('Go straight');
+          }else if(stillStraight >= 3){
+            for(var [k,v] of navigateNode.get(pathResult[Math.floor(i/2)])){
+              if(k.indexOf('b')===0) {
+                directionText.push('You should see ' + navigateNode.get(k).get('Description') + ' on the ' + facingDirection(compassnow, v));
+                stillStraight = -1;
+              }
+            }
+          }
+          stillStraight++;
         }else if(compassnew === -1 || compassnew === -2){
           compassnow = facing
           directionText.push('Go ' + direction[i] + ' the stair');
-          stillStraight = false;
+          stillStraight = 0;
         }else if(facing === 'right'){
-          if(stillStraight===true){
+          if(stillStraight>0){
             for(var [k,v] of navigateNode.get(pathResult[Math.floor(i/2)])){
               if(k.indexOf('b')===0) {
                 directionText.push('You should see ' + navigateNode.get(k).get('Description') + ' on the ' + facingDirection(compassnow, v));
@@ -206,9 +215,9 @@ function navigate(req, res, next){
           }
           compassnow = compassnew;
           directionText.push('Turn right');
-          stillStraight = false;
+          stillStraight = 0;
         }else if(facing === 'left'){
-          if(stillStraight===true){
+          if(stillStraight>0){
             for(var [k,v] of navigateNode.get(pathResult[Math.floor(i/2)])){
               if(k.indexOf('b')===0) {
                 directionText.push('You should see ' + navigateNode.get(k).get('Description') + ' on the ' + facingDirection(compassnow, v));
@@ -217,7 +226,7 @@ function navigate(req, res, next){
           }
           compassnow = compassnew;
           directionText.push('Turn left');
-          stillStraight = false;
+          stillStraight = 0;
         }
       }
       if(i===direction.length-1){
