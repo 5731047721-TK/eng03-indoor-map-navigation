@@ -178,7 +178,7 @@ class HeaderNavigation extends Component {
                  :  <ListGroup>
                      <ListGroupItem color="success"> 
                      <ListGroupItemHeading>Starting Navigation</ListGroupItemHeading>
-                    From :{this.props.info[this.props.sPoint]} to :{this.props.info[this.props.ePoint]}
+                    From : {this.props.info[this.props.sPoint]} to {this.props.info[this.props.ePoint]}
                      </ListGroupItem>
                         {listInfo} 
                     </ListGroup>
