@@ -18,11 +18,13 @@ class HeaderNavigation extends Component {
             startName:'',
             endName:'',
             currentFloor:'',
+            selectNavi: 0
             
         }
         this.handleChange = this.handleChange.bind(this);
         this.dropDownStartChange = this.dropDownStartChange.bind(this);
         this.dropDownEndChange = this.dropDownEndChange.bind(this);
+        this.navigateClick = this.navigateClick.bind(this);
     }
 
 
@@ -47,7 +49,12 @@ class HeaderNavigation extends Component {
         console.log(event.target.options[selectedIndex].getAttribute('data-id'));
         this.props.callbackEndPoint(event.target.options[selectedIndex].getAttribute('data-id'));
         this.setState({endName: event.target.value});
-    }   
+    }
+    
+    navigateClick(e){
+        //console.log(e.target.id)
+        this.setState({selectNavi: e.target.id});
+    }
 
 
 
@@ -122,9 +129,10 @@ class HeaderNavigation extends Component {
             </Input>
         }
         
-
+        var count = 0
         const listInfo = this.props.data.map((info) =>
-        <ListGroupItem>{info}</ListGroupItem>
+        <ListGroupItem className = {(this.state.selectNavi == count) ? "active" : ""} id = {count++}  onClick = {this.navigateClick}>{info}</ListGroupItem>
+        
           );
         
        
