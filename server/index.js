@@ -243,7 +243,7 @@ function navigate(req, res, next){
         }else if(lasttext==='Turn left'){
           directionText.push('Your place is on the left');
         }else{
-          directionText.push('You should see your place');
+          directionText.push('You have arrived at your destination!');
           // console.log(lasttext);
         }
         // directionText.push('Your place is on') 
