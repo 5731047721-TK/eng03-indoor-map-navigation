@@ -91,7 +91,8 @@ function facingDirection(facing, newFacing){
   
   var compassnow = facing;
   if(compassnew === -1 || compassnew === -2){
-    return compass.get((compassnow+2)%4);
+    // console.log((compassnow+2)%4, compass.get((compassnow+2)%4))
+    return (compassnow+2)%4;
   }
   if((compassnew - compassnow)%4 > 0){
     return 'right';
@@ -100,7 +101,7 @@ function facingDirection(facing, newFacing){
   }else if(compassnew === compassnow){
     return 'front';
   }else{
-    console.log('wut',compassnew,newFacing,compassnow, facing)
+    console.log('This should be a mistake',compassnew,newFacing,compassnow, facing)
   }
 }
 
@@ -186,8 +187,10 @@ function navigate(req, res, next){
       }else {
         var compassnew = compass.get(direction[i]);
         var facing = facingDirection(compassnow, direction[i]);
-        if(navigateNode.get(pathResult[Math.floor(i/2)]).get('Description') !== null && (compassnew !== -1 && compassnew !== -2)){
-          directionText.push('Enter ' + navigateNode.get(pathResult[Math.floor(i/2)]).get('Description'));
+        console.log('>',i,compassnow, direction[i], pathResult[Math.floor(i/2)]);
+        if(navigateNode.get(pathResult[Math.floor(i/2)+1]).get('Description') !== null && (compassnew !== -1 && compassnew !== -2)){
+          console.log(navigateNode.get(pathResult[Math.floor(i/2)+1]), compassnew, direction[i])
+          directionText.push('Enter ' + navigateNode.get(pathResult[Math.floor(i/2)+1]).get('Description'));
           stillStraight = 0;
         }else if(facing === 'front'){
           if(stillStraight===0){
@@ -205,6 +208,7 @@ function navigate(req, res, next){
           compassnow = facing
           directionText.push('Go ' + direction[i] + ' the stair');
           stillStraight = 0;
+          gotCompass = false;
         }else if(facing === 'right'){
           if(stillStraight>0){
             for(var [k,v] of navigateNode.get(pathResult[Math.floor(i/2)])){
@@ -239,7 +243,7 @@ function navigate(req, res, next){
         }else if(lasttext==='Turn left'){
           directionText.push('Your place is on the left');
         }else{
-          directionText.push(lasttext + ' and you should see your place');
+          directionText.push('You should see your place');
           // console.log(lasttext);
         }
         // directionText.push('Your place is on') 
