@@ -5,7 +5,7 @@ import FloorTwo from './b3FloorTwo.js';
 import FloorThree from './b3FloorThree.js';
 import FloorFour from './b3FloorFour.js';
 import HeaderNavigation from './HeaderNavigation'
-import { Container,Label,Input,InputGroup,InputGroupAddon, ButtonGroup,Row,Col,Nav,NavItem,NavLink, Button } from 'reactstrap';
+import { Container,Input,InputGroup,InputGroupAddon, ButtonGroup,Row,Col, Button } from 'reactstrap';
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.css';
 
@@ -22,6 +22,12 @@ class App extends React.Component {
             currentFloor: '',
             info: [],
             data: [],
+            naviData:[],
+            routeData:[],
+            f1:[],
+            f2:[],
+            f3:[],
+            f4:[],
             isNavigate: false
         };
 
@@ -50,16 +56,32 @@ class App extends React.Component {
         fetch(path)
         .then((Response) => Response.json())
         .then((res) => {
-          console.log(res)
+          var floor1 = []
+          var floor2 = []
+          var floor3 = []
+          var floor4 = []
+          for(var key in res){
+              //console.log('key '+key.slice(1,2)+' value '+res[key])
+              if(key.slice(1,2)==1)floor1[key] = res[key]
+              else if(key.slice(1,2)==2)floor2[key] = res[key]
+              else if(key.slice(1,2)==3)floor3[key] = res[key]
+              else if(key.slice(1,2)==4)floor4[key] = res[key]
+          }  
+          //console.log(floor1)
+          //console.log(floor2)
+          //console.log(floor3)
+          //console.log(floor4)
           this.setState({
             info: res,
+            f1:floor1,
+            f2:floor2,
+            f3:floor3,
+            f4:floor4,
             isLoading: false,
           })
-          
         })
     }
 
-   
 
     myCallbackStartPoint = (dataFromChild) => {
         this.setState({
@@ -80,7 +102,7 @@ class App extends React.Component {
             selectPoint: dataFromChild
           })
         console.log('select:'+dataFromChild)
-        console.log('isLoading:'+this.state.isLoading+' length :'+this.state.info.length)
+        //console.log('isLoading:'+this.state.isLoading+' length :'+this.state.info.length)
     }
 
     onClick(e){
@@ -100,12 +122,28 @@ class App extends React.Component {
         .then((Response) => Response.json())
         .then((res) => {
           console.log(res)
+          //console.log(res.length)
+          var isWord = true
+          var navi = []
+          var route = []
+          for(var i = 0;i < res.length;i++){
+              if(isWord){
+                    if(res[i] !== '#'){
+                        navi.push(res[i])
+                    }else isWord = false
+              }else{
+                    route.push(res[i])
+              }
+          }
+          //console.log(navi)
+          //console.log(route)
           this.setState({
             data: res,
+            naviData: navi,
+            routeData: route,
             isNavigate: true
           })
         })
-        console.log(this.state.data);
     }
 
     
@@ -117,10 +155,10 @@ class App extends React.Component {
 
       nav = <Col >
          <ButtonGroup>
-          <Button size="sm" id = 'floor1' onClick = {this.handleChangeFloor} color="info">floor1</Button>
-          <Button size="sm" id = 'floor2' onClick = {this.handleChangeFloor} color="info">floor2</Button>
-          <Button size="sm" id = 'floor3' onClick = {this.handleChangeFloor} color="info">floor3</Button>
-          <Button size="sm" id = 'floor4' onClick = {this.handleChangeFloor} color="info">floor4</Button>
+          <Button color="primary" size="sm" id = 'floor1' onClick = {this.handleChangeFloor} color="info">floor1</Button>
+          <Button color="primary" size="sm" id = 'floor2' onClick = {this.handleChangeFloor} color="info">floor2</Button>
+          <Button color="primary" size="sm" id = 'floor3' onClick = {this.handleChangeFloor} color="info">floor3</Button>
+          <Button color="primary" size="sm" id = 'floor4' onClick = {this.handleChangeFloor} color="info">floor4</Button>
           </ButtonGroup>
       </Col>
 
@@ -132,12 +170,12 @@ class App extends React.Component {
       return (
         <Container>
                 <Row>
-                    <Col sm="1"><img src={process.env.PUBLIC_URL + '/favicon.ico'} height="42" width="40" /></Col>
+                    <Col sm="1"><a href="/"> <img alt="icon" src={process.env.PUBLIC_URL + '/favicon.ico'} height="42" width="40" /></a></Col>
                     {nav}
                     <Col sm="6">
                         <InputGroup>     
-                            <Input sm="4" id="startPoint"  ref="EndInput" placeholder='Start Point' value= {this.state.info[this.state.startPoint]}  />
-                            <Input sm="4" id="endPoint"  ref="EndInput" placeholder='End Point' value={this.state.info[this.state.endPoint]}  />
+                            <Input sm="4" id="startPoint"  ref="EndInput" placeholder='Start Point' value= {this.state.info[this.state.startPoint]}  disabled/>
+                            <Input sm="4" id="endPoint"  ref="EndInput" placeholder='End Point' value={this.state.info[this.state.endPoint]} disabled />
                             <InputGroupAddon addonType="append">
                                 <Button color="success" onClick={this.handleSubmit.bind(this)}>Submit</Button>
                             </InputGroupAddon> 
@@ -153,8 +191,9 @@ class App extends React.Component {
                  }
                  {m}
                 <Row>
-                    <HeaderNavigation data = {this.state.data} info = {this.state.info} isNavigate = {this.state.isNavigate}
+                    <HeaderNavigation data = {this.state.naviData} info = {this.state.info} isNavigate = {this.state.isNavigate}
                     sPoint = {this.state.startPoint} ePoint = {this.state.endPoint} 
+                    floor1 = {this.state.f1} floor2 = {this.state.f2} floor3 = {this.state.f3} floor4 = {this.state.f4}
                     callbackStartPoint={this.myCallbackStartPoint} callbackEndPoint={this.myCallbackEndPoint}/>
                     
                 </Row>
