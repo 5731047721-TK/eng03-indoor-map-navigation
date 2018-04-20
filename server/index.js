@@ -200,9 +200,9 @@ function navigate(req, res, next){
       }else {
         var compassnew = compass.get(direction[i]);
         var facing = facingDirection(compassnow, direction[i]);
-        console.log('>',i,compassnow, direction[i], pathResult[Math.floor(i/2)+1]);
+        // console.log('>',i,compassnow, direction[i], pathResult[Math.floor(i/2)+1]);
         if(navigateNode.get(pathResult[Math.floor(i/2)+1]).get('Description') !== null && (compassnew !== -1 && compassnew !== -2)){
-          console.log(navigateNode.get(pathResult[Math.floor(i/2)+1]), compassnew, direction[i])
+          // console.log(navigateNode.get(pathResult[Math.floor(i/2)+1]), compassnew, direction[i])
           directionText.push('Enter ' + navigateNode.get(pathResult[Math.floor(i/2)+1]).get('Description'));
           stillStraight = 0;
         }else if(facing === 'front'){
