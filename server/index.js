@@ -147,27 +147,10 @@ function navigate(req, res, next){
             var texttemp = 'You can see ';
             var flag = false;
             for(var j=0;j<direction[i].length;j++){
-              if(j !== direction[i].length-1){
+              if(j === 0){
                   if(gotCompass === false){
                     flag = true;
                     texttemp += direction[i][j][0] + ' on the ' + compass.get(direction[i][j][1]) + ', ';
-                  } else {
-                    var facing = facingDirection(compassnow, direction[i][j][1]);
-                    if(facing === 'front'){
-                      flag = true;
-                      texttemp += direction[i][j][0] + ' in front of you, '
-                    }else if(facing === 'right'){
-                      flag = true;
-                      texttemp += direction[i][j][0] + ' on your right, '
-                    }else if(facing === 'left'){
-                      flag = true;
-                      texttemp += direction[i][j][0] + ' on your left, '
-                    }
-                  }
-                }else{
-                  if(gotCompass === false){
-                    flag = true;
-                    texttemp += direction[i][j][0] + ' on the ' + compass.get(direction[i][j][1]);
                   } else {
                     var facing = facingDirection(compassnow, direction[i][j][1]);
                     if(facing === 'front'){
@@ -179,6 +162,23 @@ function navigate(req, res, next){
                     }else if(facing === 'left'){
                       flag = true;
                       texttemp += direction[i][j][0] + ' on your left'
+                    }
+                  }
+                }else{
+                  if(gotCompass === false){
+                    flag = true;
+                    texttemp += ', ' + direction[i][j][0] + ' on the ' + compass.get(direction[i][j][1]);
+                  } else {
+                    var facing = facingDirection(compassnow, direction[i][j][1]);
+                    if(facing === 'front'){
+                      flag = true;
+                      texttemp += ', ' + direction[i][j][0] + ' in front of you'
+                    }else if(facing === 'right'){
+                      flag = true;
+                      texttemp += ', ' + direction[i][j][0] + ' on your right'
+                    }else if(facing === 'left'){
+                      flag = true;
+                      texttemp += ', ' + direction[i][j][0] + ' on your left'
                     }
                   }
                 }
