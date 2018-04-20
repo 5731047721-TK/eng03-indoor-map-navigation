@@ -206,7 +206,7 @@ function navigate(req, res, next){
           stillStraight++;
         }else if(compassnew === -1 || compassnew === -2){
           compassnow = facing
-          directionText.push('Go ' + direction[i] + ' the stair');
+          directionText.push('Go ' + direction[i]);
           stillStraight = 0;
           gotCompass = false;
         }else if(facing === 'right'){
