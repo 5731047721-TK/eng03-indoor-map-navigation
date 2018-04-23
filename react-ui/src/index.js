@@ -19,7 +19,7 @@ class App extends React.Component {
             selectPoint: '',
             startPoint: '',
             endPoint: '',
-            currentFloor: '',
+            currentFloor: 'floor1',
             info: [],
             data: [],
             naviData:[],
