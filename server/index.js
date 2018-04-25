@@ -252,6 +252,7 @@ function navigate(req, res, next){
         }else if(lasttext==='Turn left'){
           directionText.push('Your place is on the left');
         }else{
+          directionText.push(lasttext);
           directionText.push('You have arrived at your destination!');
           // console.log(lasttext);
         }
