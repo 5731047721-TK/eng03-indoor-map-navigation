@@ -26,13 +26,13 @@ body {
   background-color: yellowgreen;
 }
 
-/*path:hover{
+path:active{
   stroke: #002868 !important;
   stroke-width:2px;
   stroke-linejoin: round;
   fill: #002868 !important;
   cursor: pointer;
-}*/
+}
 
 path{
   stroke: #002868 !important;

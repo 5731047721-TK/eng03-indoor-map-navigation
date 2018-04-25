@@ -63,7 +63,7 @@ export default class FloorOne extends React.Component {
               <title
                 id="title965">Storage Room 2</title>
             </path>
-            <path onClick = {this.onClick}
+            <path  onClick = {this.onClick}
               id="b1_8"
               d="m -125.04715,83.241848 v 14.816688 h 20.10837 V 83.241848 Z"
               ////style="fill:#ff6600;stroke:#000000;stroke-width:0.26917523;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:0, 2.96092769;stroke-dashoffset:0;stroke-opacity:1"

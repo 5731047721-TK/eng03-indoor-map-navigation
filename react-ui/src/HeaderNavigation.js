@@ -13,11 +13,11 @@ class HeaderNavigation extends Component {
         super(props);
         this.state = {
             isLoading: true,
-            startFloor:'',
-            endFloor:'',
+            startFloor:'floor1',
+            endFloor:'floor1',
             startName:'',
             endName:'',
-            currentFloor:'',
+            currentFloor:'floor1',
             selectNavi: 0
             
         }
@@ -143,7 +143,7 @@ class HeaderNavigation extends Component {
                     <Container>
                     
                     <Row>
-                        <Col sm="8"><h1> Eng03-indoor-map </h1></Col>
+                        <Col sm="8"><h2> Eng03-indoor-map </h2></Col>
                     </Row>
                     <Row>
                         <Col >
